@@ -2,7 +2,6 @@
 const {
   Model
 } = require('sequelize');
-const { User, Group } = require('.');
 
 module.exports = (sequelize, DataTypes) => {
   class UserGroup extends Model {
@@ -21,8 +20,6 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'UserGroup',
   });
-  Group.belongsToMany(User, { through: 'UserGroup' });
-  User.belongsToMany(Group, { through: 'UserGroup' });
 
   return UserGroup;
 };
