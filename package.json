@@ -1,6 +1,9 @@
 {
   "dependencies": {
     "dotenv": "^16.3.1",
-    "ldapjs": "^3.0.5"
+    "ldapjs": "^3.0.5",
+    "mysql2": "^3.6.2",
+    "sequelize": "^6.33.0",
+    "sequelize-cli": "^6.6.1"
   }
 }
