@@ -160,6 +160,19 @@ function displayUserByManagers(){
   })
 }
 
+// Function to display all users by name of manager
+function usersUnderManager(managerDn){
+  User.findAll({where: {manager: managerDn}}).then(async function(users){
+    for (var j = 0; j < users.length; j++){
+      console.log("* User under manager: ", users[j].cn)
+      // for each user display all the PermissionGroups they are part of
+      const groups = await users[j].getPermissionGroups()
+      for (var k = 0; k < groups.length; k++){
+        console.log("* * User belongs to :", groups[k].cn)
+      }
+    }
+  })
+}
 
 // Handle LDAP client events
 client.on('error', (err) => {
@@ -192,4 +205,5 @@ async function main(){
 }
 //main()
 
-displayUserByManagers();
+//displayUserByManagers();
+usersUnderManager("uid=manager01,ou=users,ou=system");
