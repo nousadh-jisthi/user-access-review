@@ -24,14 +24,14 @@ function createLdapConnection() {
 }
 
 // Retrieve all users from LDAP server
-async function getAllUsers() {
+async function getAllUsers(successCallback, errorCallback) {
   var opts = {
       filter: '(objectClass=inetOrgPerson)',  //simple search
       scope: 'sub',
       attributes: ['sn', 'cn', 'uid', 'manager']
   };
 
-  client.search('ou=users,ou=system', opts, async function (err, res) {
+  client.search('ou=users,ou=system', opts, function (err, res) {
       if (err) {
           console.log("Error in search " + err)
       } else {
@@ -47,10 +47,11 @@ async function getAllUsers() {
             });
             res.on('error', (err) => {
               console.error('error: ' + err.message);
+              errorCallback()
             });
-            await res.on('end', (result) => {
+            res.on('end', (result) => {
               console.log('status: ' + result.status);
-              return result.status
+              successCallback()
               // Close the connection when you're done
 
               // Probably don't need to unbind if it is a constant connection
@@ -138,16 +139,57 @@ function parsePermissionGroup(entry){
       }
     }
   });
-  
-  
-  
 }
+
+// Function to display all users by name of manager
+function displayUserByManagers(){
+  User.findAll({attributes: ['manager'], group: ['manager']}).then(async function(managers){
+    console.log(JSON.stringify(managers))
+    for (var i = 0; i < managers.length; i++){
+      const users = await User.findAll({where: {manager: managers[i].manager}})
+      console.log("Manager: " + managers[i].manager);
+      for (var j = 0; j < users.length; j++){
+        console.log("* User under manager: ", users[j].cn)
+        // for each user display all the PermissionGroups they are part of
+        const groups = await users[j].getPermissionGroups()
+        for (var k = 0; k < groups.length; k++){
+          console.log("* * User belongs to :", groups[k].cn)
+        }
+      }
+    }
+  })
+}
+
 
 // Handle LDAP client events
 client.on('error', (err) => {
   console.error('LDAP Client Error:', err);
 });
 
+// From github https://stackoverflow.com/questions/5010288/how-to-make-a-function-wait-until-a-callback-has-been-called-using-node-js
+// Is used to make sure that getAllUsers() is executed before calling the next function.
+function getAllUsersWrapper() {
+  return new Promise((resolve, reject) => {
+      getAllUsers((successResponse) => {
+          resolve(successResponse);
+      }, (errorResponse) => {
+          reject(errorResponse);
+      });
+  });
+}
+
 createLdapConnection();
-getAllUsers();
-getAllPermissionGroups();
+/*getAllUsers().then(() => {
+  getAllPermissionGroups();
+});*/
+async function main(){
+  try{
+    await getAllUsersWrapper()
+    getAllPermissionGroups();
+  }catch(err){
+    console.log(err)
+  }
+}
+//main()
+
+displayUserByManagers();
