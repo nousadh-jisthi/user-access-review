@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      aduitId: {
+      auditId: {
         type: Sequelize.INTEGER
       },
       dn: {
