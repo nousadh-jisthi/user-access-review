@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.belongsToMany(models.Group, { through: 'UserGroup' });
+      User.belongsToMany(models.PermissionGroup, { through: 'UserGroup', foreignKey: 'userId'});
     }
   }
   User.init({

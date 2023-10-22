@@ -2,18 +2,17 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Groups', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
+    await queryInterface.createTable('UserGroups', {
+      auditId: {
         type: Sequelize.INTEGER
       },
-      aduitId: {
-        type: Sequelize.INTEGER
+      userId: {
+        type: Sequelize.INTEGER,
+        primaryKey: true
       },
-      cn: {
-        type: Sequelize.STRING
+      permissiongroupId: {
+        type: Sequelize.INTEGER,
+        primaryKey: true      
       },
       createdAt: {
         allowNull: false,
@@ -26,6 +25,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Groups');
+    await queryInterface.dropTable('UserGroups');
   }
 };
