@@ -15,6 +15,9 @@ module.exports = {
       auditDescription: {
         type: Sequelize.STRING
       },
+      auditStartDate: {
+        type: Sequelize.DATE
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
