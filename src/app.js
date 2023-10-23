@@ -22,6 +22,9 @@ app.use('/audit', auditRouter);
 const auditService = require('./services/audit.service');
 //auditService.collect_audit_data(1);
 
+const auditScheduler = require('./schedulers/audit.scheduler');
+auditScheduler.run_any_pending_audit();
+
 const server = app.listen( app_port , app_host, function(){
   console.log('Listening on port ' + server.address().port);
 });

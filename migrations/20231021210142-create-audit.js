@@ -18,6 +18,12 @@ module.exports = {
       auditStartDate: {
         type: Sequelize.DATE
       },
+      collected_at:{
+        type: Sequelize.DATE
+      },
+      completed_at:{
+        type: Sequelize.DATE
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

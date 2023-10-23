@@ -73,6 +73,7 @@ function parseEmployee(entry, audit_id) {
 
 // Function to get all the groups from LDAP server
 function getAllPermissionGroups(audit_id){
+  return new Promise((resolve, reject) => {
     var opts = {
       // TODO: Update filter to include other group object classes
       filter: '(objectClass=groupOfUniqueNames)',
@@ -83,6 +84,7 @@ function getAllPermissionGroups(audit_id){
     client.search('ou=groups,ou=system', opts, async function (err, res) {
       if (err) {
           console.log("Error in search " + err)
+          reject(err)
       } else {
           res.on('searchRequest', (searchRequest) => {
               console.log('searchRequest: ', searchRequest.messageId);
@@ -99,11 +101,12 @@ function getAllPermissionGroups(audit_id){
             });
             await res.on('end', (result) => {
               console.log('status: ' + result.status);
-              return result.status
+              resolve(result.status)
             });
       }
     });
-  }
+  });
+}
   
 function parsePermissionGroup(entry, audit_id){
     attributes = entry.pojo.attributes;

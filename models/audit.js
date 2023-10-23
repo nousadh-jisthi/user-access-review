@@ -16,7 +16,9 @@ module.exports = (sequelize, DataTypes) => {
   Audit.init({
     auditName: DataTypes.STRING,
     auditDescription: DataTypes.STRING,
-    auditStartDate: DataTypes.DATE
+    auditStartDate: DataTypes.DATE,
+    collected_at: DataTypes.DATE,
+    completed_at: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'Audit',
