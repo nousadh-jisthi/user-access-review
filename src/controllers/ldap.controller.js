@@ -1,5 +1,5 @@
 const ldap = require('ldapjs');
-const { User, PermissionGroup, UserGroup } = require('../../models');
+const { Employee, PermissionGroup, EmployeeGroup } = require('../../models');
 require('dotenv').config();
 
 // Configuration for your LDAP server
@@ -22,25 +22,25 @@ function createLdapConnection() {
   });
 }
 
-// Function to display all users by name of manager
-async function usersUnderManager(managerDn){
-    var response = {"manager": managerDn, "users": []}
-    await User.findAll({where: {manager: managerDn}}).then(async function(users){
-      for (var j = 0; j < users.length; j++){
-        console.log("* User under manager: ", users[j].cn)
-        var user = {
-            "cn": users[j].cn,
-            "dn": users[j].dn,
-            "manager": users[j].manager,
+// Function to display all employees by name of manager
+async function employeesUnderManager(managerDn){
+    var response = {"manager": managerDn, "employees": []}
+    await Employee.findAll({where: {manager: managerDn}}).then(async function(employees){
+      for (var j = 0; j < employees.length; j++){
+        console.log("* Employee under manager: ", employees[j].cn)
+        var employee = {
+            "cn": employees[j].cn,
+            "dn": employees[j].dn,
+            "manager": employees[j].manager,
             "groups": []
         } 
         // for each user display all the PermissionGroups they are part of
-        const groups = await users[j].getPermissionGroups()
+        const groups = await employees[j].getPermissionGroups()
         for (var k = 0; k < groups.length; k++){
-          //console.log("* * User belongs to :", groups[k].cn)
-          user.groups.push(groups[k].cn)
+          //console.log("* * Employee belongs to :", groups[k].cn)
+          employee.groups.push(groups[k].cn)
         }
-        response.users.push(user)
+        response.employees.push(employee)
         console.log(JSON.stringify(response))
       }
 
@@ -49,8 +49,8 @@ async function usersUnderManager(managerDn){
     return response
 }
 
-// Retrieve all users from LDAP server
-async function getAllUsers(successCallback, errorCallback) {
+// Retrieve all employees from LDAP server
+async function getAllEmployees(successCallback, errorCallback) {
     var opts = {
         filter: '(objectClass=inetOrgPerson)',  //simple search
         scope: 'sub',
@@ -66,7 +66,7 @@ async function getAllUsers(successCallback, errorCallback) {
               });
               res.on('searchEntry', (entry) => {
                 //console.log('entry: ' + JSON.stringify(entry.pojo));
-                parseUser(entry);
+                parseEmployee(entry);
               });
               res.on('searchReference', (referral) => {
                 console.log('referral: ' + referral.uris.join());
@@ -94,16 +94,16 @@ async function getAllUsers(successCallback, errorCallback) {
     }
   
 // Function to parse information of user from entry
-function parseUser(entry) {
+function parseEmployee(entry) {
       attributes = entry.pojo.attributes;
       // For loop to go over attributes
-      var user = {}
-      user["dn"] = entry.pojo.objectName
+      var employee = {}
+      employee["dn"] = entry.pojo.objectName
       attributes.forEach(attribute => {
-          user[attribute.type] = attribute.values[0]
+        employee[attribute.type] = attribute.values[0]
       });
-      console.log(JSON.stringify(user))
-      User.create(user)
+      console.log(JSON.stringify(employee))
+      Employee.create(employee)
   }
   
 // Function to get all the groups from LDAP server
@@ -158,37 +158,37 @@ function parsePermissionGroup(entry){
     PermissionGroup.create(group).then(async function(group) {
         for (var i = 0; i < members.length; i++){
         console.log(members[i])
-        const user = await User.findOne({where: {dn: members[i]}})
-        if (user){
-            console.log("User found")
-            UserGroup.create({userId: user.id, permissiongroupId: group.id})
+        const employee = await Employee.findOne({where: {dn: members[i]}})
+        if (employee){
+            console.log("Employee found")
+            EmployeeGroup.create({employeeId: employee.id, permissiongroupId: group.id})
         }
         }
     });
 }
   
 // Function to display all users by name of manager
-function displayUserByManagers(){
-User.findAll({attributes: ['manager'], group: ['manager']}).then(async function(managers){
+function displayEmployeeByManagers(){
+    Employee.findAll({attributes: ['manager'], group: ['manager']}).then(async function(managers){
     console.log(JSON.stringify(managers))
     for (var i = 0; i < managers.length; i++){
-    const users = await User.findAll({where: {manager: managers[i].manager}})
+    const employees = await Employee.findAll({where: {manager: managers[i].manager}})
     console.log("Manager: " + managers[i].manager);
-    for (var j = 0; j < users.length; j++){
-        console.log("* User under manager: ", users[j].cn)
-        // for each user display all the PermissionGroups they are part of
-        const groups = await users[j].getPermissionGroups()
+    for (var j = 0; j < employees.length; j++){
+        console.log("* Employee under manager: ", employees[j].cn)
+        // for each employee display all the PermissionGroups they are part of
+        const groups = await employees[j].getPermissionGroups()
         for (var k = 0; k < groups.length; k++){
-        console.log("* * User belongs to :", groups[k].cn)
+        console.log("* * Employee belongs to :", groups[k].cn)
         }
     }
     }
 })
 }
 
-async function get_users_by_manager (req, res, next){
+async function get_employees_by_manager (req, res, next){
     try{
-        const response = await usersUnderManager(req.query.managerDn)
+        const response = await employeesUnderManager(req.query.managerDn)
         res.json(response)
     }catch(error){
         next(error)
@@ -201,10 +201,10 @@ client.on('error', (err) => {
 });
 
 // From github https://stackoverflow.com/questions/5010288/how-to-make-a-function-wait-until-a-callback-has-been-called-using-node-js
-// Is used to make sure that getAllUsers() is executed before calling the next function.
-function getAllUsersWrapper() {
+// Is used to make sure that getAllEmployees() is executed before calling the next function.
+function getAllEmployeesWrapper() {
     return new Promise((resolve, reject) => {
-        getAllUsers((successResponse) => {
+        getAllEmployees((successResponse) => {
             resolve(successResponse);
         }, (errorResponse) => {
             reject(errorResponse);
@@ -215,7 +215,7 @@ function getAllUsersWrapper() {
 createLdapConnection();
 async function main(){
   try{
-    await getAllUsersWrapper()
+    await getAllEmployeesWrapper()
     getAllPermissionGroups();
   }catch(err){
     console.log(err)
@@ -224,5 +224,5 @@ async function main(){
 //main()
 
 module.exports = {
-    get_users_by_manager,
+    get_employees_by_manager,
 };

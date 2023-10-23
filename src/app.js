@@ -9,7 +9,7 @@ const app_host = process.env.APP_HOST || 'localhost';
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-const { User, PermissionGroup, UserGroup } = require('../models');
+const { Employee, PermissionGroup, EmployeeGroup } = require('../models');
 const { get } = require('http');
 require('dotenv').config();
 

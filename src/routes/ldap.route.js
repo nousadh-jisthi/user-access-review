@@ -1,5 +1,5 @@
 var router = require('express').Router();
 const ldapController = require('../controllers/ldap.controller');
 
-router.get('/get-users-by-manager', ldapController.get_users_by_manager);
+router.get('/get-employees-by-manager', ldapController.get_employees_by_manager);
 module.exports = router;

@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      PermissionGroup.belongsToMany(models.User, { through: 'UserGroup', foreignKey: 'permissiongroupId' });
+      PermissionGroup.belongsToMany(models.Employee, { through: 'EmployeeGroup', foreignKey: 'permissiongroupId' });
     }
   }
   PermissionGroup.init({

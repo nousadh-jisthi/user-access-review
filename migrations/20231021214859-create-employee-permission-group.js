@@ -2,11 +2,11 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('UserGroups', {
+    await queryInterface.createTable('EmployeeGroups', {
       auditId: {
         type: Sequelize.INTEGER
       },
-      userId: {
+      employeeId: {
         type: Sequelize.INTEGER,
         primaryKey: true
       },
@@ -25,6 +25,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('UserGroups');
+    await queryInterface.dropTable('EmployeeGroups');
   }
 };
