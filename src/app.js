@@ -19,6 +19,9 @@ app.use('/employee', employeeRouter);
 const auditRouter = require('./routes/audit.route');
 app.use('/audit', auditRouter);
 
+const auditService = require('./services/audit.service');
+//auditService.collect_audit_data(1);
+
 const server = app.listen( app_port , app_host, function(){
   console.log('Listening on port ' + server.address().port);
 });
