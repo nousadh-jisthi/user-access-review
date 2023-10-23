@@ -13,8 +13,8 @@ const { Employee, PermissionGroup, EmployeeGroup } = require('../models');
 require('dotenv').config();
 
 
-const ldapRouter = require('./routes/ldap.route');
-app.use('/ldap', ldapRouter);
+const employeeRouter = require('./routes/employee.route');
+app.use('/employee', employeeRouter);
 
 const auditRouter = require('./routes/audit.route');
 app.use('/audit', auditRouter);

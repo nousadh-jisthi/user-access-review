@@ -221,7 +221,7 @@ async function main(){
     console.log(err)
   }
 }
-//main()
+main()
 
 module.exports = {
     get_employees_by_manager,
