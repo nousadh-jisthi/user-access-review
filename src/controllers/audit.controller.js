@@ -1,5 +1,5 @@
 
-const {Audit} = require('../../models')
+const {Audit, ScheduledJob} = require('../../models')
 
 async function create_audit(audit_name, audit_description, audit_start_date){
     const audit = await Audit.create({auditName: audit_name, auditDescription: audit_description, auditStartDate: audit_start_date})
@@ -16,6 +16,25 @@ async function post_create_audit (req, res, next){
     }
 }
 
+async function post_set_audit_schedule_job(req, res, next){
+    try{
+        const {audit_id, audit_description, cron_string} = req.body
+        const scheduledJob = await ScheduledJob.findOne({where: {id: audit_id}})
+        if (scheduledJob){
+            scheduledJob.cronString = cron_string
+            scheduledJob.description = audit_description
+            await scheduledJob.save()
+            res.json({"message": "Audit schedule updated successfully!"})
+        }else{
+            res.json({"message": "Audit not found!"})
+        }
+    }catch(error){
+        console.log(error)
+        res.json({"message": "Error updating audit schedule!"})
+    }
+}
+
 module.exports = {
-    post_create_audit
+    post_create_audit,
+    post_set_audit_schedule_job
 };
