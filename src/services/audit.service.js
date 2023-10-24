@@ -1,19 +1,23 @@
 const ldapUtils = require('../utils/ldap.utils');
 const {Audit} = require('../../models')
 const { Op } = require('sequelize')
+require('dotenv').config();
 
 async function collect_audit_data(audit_id){
     try{
-        ldapUtils.createLdapConnection();
+        await ldapUtils.createLdapConnection(process.env.LDAP_BIND_DN, process.env.LDAP_PASSWORD);
         await ldapUtils.getAllEmployeesWrapper(audit_id);
         await ldapUtils.getAllPermissionGroups(audit_id);
-        
+
         await Audit.update({collected_at: new Date()}, {where: {id: audit_id}})
 
         return true;
       }catch(err){
         console.log(err)
         return false;
+    }finally{
+        ldapUtils.closeLdapConnection();
+    
     }
 }
 

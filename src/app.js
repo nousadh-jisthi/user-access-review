@@ -19,6 +19,9 @@ app.use('/employee', employeeRouter);
 const auditRouter = require('./routes/audit.route');
 app.use('/audit', auditRouter);
 
+const authRouter = require('./routes/auth.route');
+app.use('/auth', authRouter);
+
 const auditService = require('./services/audit.service');
 //auditService.collect_audit_data(1);
 

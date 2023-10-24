@@ -9,16 +9,40 @@ const ldapOptions = {
     bindCredentials: process.env.LDAP_PASSWORD, // Replace with your bind credentials
 };
 
-const client = ldap.createClient(ldapOptions);
+var client;
 
 // Connect to LDAP server
-function createLdapConnection() {
-  client.bind(ldapOptions.bindDN, ldapOptions.bindCredentials, (err) => {
-    if (err) {
-      console.error('LDAP Bind Error:', err);
-    } else {
-      console.log('LDAP Bind Successful');
-    }
+function createLdapConnection(bindDn, bindCredentials) {
+  return new Promise((resolve, reject) => {
+    client = ldap.createClient(ldapOptions);
+    client.bind(bindDn, bindCredentials, (err) => {
+      if (err) {
+        //console.error('LDAP Bind Error:', err);
+        reject(err);
+      } else {
+        console.log('LDAP Bind Successful');
+        resolve(bindDn);
+      }
+    });
+    
+    // Handle LDAP client events
+    client.on('error', (err) => {
+      console.error('LDAP Client Error:', err);
+    });
+  });
+}
+
+function closeLdapConnection() {
+  return new Promise((resolve, reject) => {
+    client.unbind((err) => {
+      if (err) {
+        console.error('LDAP Unbind Error:', err);
+        reject(err);
+      } else {
+        console.log('LDAP Unbind Successful');
+        resolve();
+      }
+    });
   });
 }
 
@@ -148,13 +172,11 @@ function getAllEmployeesWrapper(audit_id) {
     });
 }
 
-// Handle LDAP client events
-client.on('error', (err) => {
-    console.error('LDAP Client Error:', err);
-});
+
 
 module.exports = {
     createLdapConnection,
     getAllEmployeesWrapper,
-    getAllPermissionGroups
+    getAllPermissionGroups,
+    closeLdapConnection
 };
