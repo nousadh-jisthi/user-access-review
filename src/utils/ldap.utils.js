@@ -151,7 +151,7 @@ function parsePermissionGroup(entry, audit_id){
     PermissionGroup.create(group).then(async function(group) {
         for (var i = 0; i < members.length; i++){
         console.log(members[i])
-        const employee = await Employee.findOne({where: {dn: members[i]}})
+        const employee = await Employee.findOne({where: {auditId: audit_id, dn: members[i]}})
         if (employee){
             console.log("Employee found")
             EmployeeGroup.create({employeeId: employee.id, permissiongroupId: group.id, auditId: audit_id})
