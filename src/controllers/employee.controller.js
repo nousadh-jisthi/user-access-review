@@ -2,6 +2,7 @@ const ldap = require('ldapjs');
 const { Employee, PermissionGroup, EmployeeGroup } = require('../../models');
 require('dotenv').config();
 
+// TODO: Add middleware for checking if audit is active
 
 // Function to display all employees by name of manager
 async function employeesUnderManager(managerDn, audit_id){
@@ -64,12 +65,29 @@ async function get_my_employees (req, res, next){
         const response = await employeesUnderManager(req.userDn, req.query.audit_id)
         res.json(response)
     }catch(error){
+        console.log(error)
         res.status(500).json({"message": "Server Error"})
     }
 }
 
+async function reject_group(req, res, next){
+    try{
+        const employee = await Employee.findOne({where: {dn: req.body.employyeId}})
+        if(!employee || employee.manager !== req.userDn){
+            return res.status(403).json({"message": "You are not authorized to perform this action"})
+        }
+        const group = await PermissionGroup.findOne({where: {cn: req.body.groupName}})
+
+        // TODO: Change database model, include approved/rejected column in EmployeeGroup table and here set it as false when it is rejected
+        await employee.removePermissionGroup(group)
+        res.json({"message": "success"})
+    }catch(error){
+        res.status(500).json({"message": "Server Error"})
+    }
+}
 
 module.exports = {
     get_employees_by_manager,
-    get_my_employees
+    get_my_employees,
+    reject_group
 };
