@@ -1,13 +1,13 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-const verifyToken = (req, res, next) => {
+/*const verifyToken = (req, res, next) => {
     let authToken = req.headers['authorization'];
     
         if (authToken && authToken.startsWith('Bearer ')){
             try{
                 let token = authToken.slice(7, authToken.length);
-                const decoded = jwt.verify(token, process.env.JWT_SECRET);
+                const decoded = jwt.verify(token, process.env.APP_SECRET);
                 req.userDn = decoded.userDn;
             }catch(err){
                 console.log(err)
@@ -18,8 +18,15 @@ const verifyToken = (req, res, next) => {
         }
     
     return next();
-} 
+}*/
+const isEmployeeLoggedIn = (req, res, next) => {
+    if (req.session.userDn){
+        return next();
+    }else{
+        return res.redirect('/auth/login');
+    }
+}
 
 module.exports = {
-    verifyToken
+    isEmployeeLoggedIn
 };

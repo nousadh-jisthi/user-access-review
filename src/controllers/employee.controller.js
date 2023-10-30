@@ -86,8 +86,14 @@ async function reject_group(req, res, next){
     }
 }
 
+async function get_home(req, res, next){
+
+    res.render('pages/home', {userDn: req.session.userDn})
+}
+
 module.exports = {
     get_employees_by_manager,
     get_my_employees,
-    reject_group
+    reject_group,
+    get_home
 };
