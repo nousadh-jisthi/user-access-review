@@ -2,6 +2,7 @@ const ldapUtils = require('../utils/ldap.utils');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+// TODO: Session is used for simplicity. Replace with JWT in the future
 // TODO: Authentication for administrators
 
 /*async function authenticate_employee(userDn, password){

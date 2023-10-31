@@ -29,7 +29,7 @@ async function employeesUnderManager(managerDn, audit_id){
     console.log(JSON.stringify(response))
     return response
 }
-  
+
 // Function to display all users by name of manager
 function displayEmployeeByManagers(audit_id){
     Employee.findAll({attributes: ['manager'], group: ['manager'], where: {
@@ -62,7 +62,7 @@ async function get_employees_by_manager (req, res, next){
 
 async function get_my_employees (req, res, next){
     try{
-        const response = await employeesUnderManager(req.userDn, req.query.audit_id)
+        const response = await employeesUnderManager(req.session.userDn, req.query.audit_id)
         res.json(response)
     }catch(error){
         console.log(error)
@@ -91,9 +91,14 @@ async function get_home(req, res, next){
     res.render('pages/home', {userDn: req.session.userDn})
 }
 
+async function get_audit_employees(req, res, next){
+    res.render('pages/audit_employees',{audit_id: req.query.audit_id} )
+}
+
 module.exports = {
     get_employees_by_manager,
     get_my_employees,
     reject_group,
-    get_home
+    get_home,
+    get_audit_employees
 };

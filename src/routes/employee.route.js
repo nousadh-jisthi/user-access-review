@@ -6,5 +6,6 @@ router.get('/get-employees-by-manager', employeeController.get_employees_by_mana
 router.get('/get-my-employees', authMiddleware.isEmployeeLoggedIn, employeeController.get_my_employees);
 router.post('/reject-group', authMiddleware.isEmployeeLoggedIn, employeeController.reject_group);
 router.get('/home', authMiddleware.isEmployeeLoggedIn, employeeController.get_home);
+router.get('/audit-employees', authMiddleware.isEmployeeLoggedIn, employeeController.get_audit_employees);
 
 module.exports = router;

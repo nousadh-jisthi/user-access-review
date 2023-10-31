@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    
+</head>
+<body>
+    <header id="audit" data-audit-id="<%= audit_id %>">
+        <h1>User Access Review - Audit <%= audit_id %></h1>
+    </header>
+    <main>
+        <div class="sidebar">
+            <h2>User List</h2>
+            <ul id="userList">
+                
+            </ul>
+        </div>
+        <div class="content">
+            <h2>User </h2>
+            <div id="userDetails">
+                <div id="userInfo">
+                <h3>User Details</h3>
+                    
+                </div>
+                <div>
+                <h3>Permissions</h3>
+                <ul id="permissionsList">
+          
+                </ul>
+                    
+                </div>
+                <button id="submitButton">Submit</button>
+            </div>
+        </div>
+        <div class="sidebar-right">
+            <h2>Permission Details</h2>
+            <div id="permissionInfo">
+                
+            </div>
+        </div>
+    </main>
+    <script src="/js/script.js"></script>
+</body>
+</html>

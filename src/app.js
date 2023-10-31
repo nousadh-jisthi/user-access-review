@@ -18,7 +18,9 @@ app.use(session({
 	secret: process.env.APP_SECRET,
 	resave: true,
 	saveUninitialized: true
-}));1
+}));
+
+app.use(express.static(path.join(__dirname,'public')))
 
 const { Employee, PermissionGroup, EmployeeGroup } = require('../models');
 

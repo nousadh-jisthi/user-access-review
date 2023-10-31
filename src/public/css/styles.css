@@ -1,0 +1,140 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+main {
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+}
+
+.sidebar {
+    flex: 1;
+    background-color: #f1f1f1;
+    padding: 20px;
+}
+
+.sidebar-right {
+    flex: 1;
+    background-color: #f1f1f1;
+    padding: 20px;
+    margin-left: 20px;
+}
+
+.content {
+    flex: 2;
+    background-color: #fff;
+    padding: 20px;
+    margin-left: 20px;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+#userList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#userList li {
+    cursor: pointer;
+    padding: 10px;
+}
+
+#userList li.active {
+    background-color: #ccc;
+}
+#userList li {
+    cursor: pointer;
+    padding: 5px 0;
+}
+
+#userList li:hover {
+        background-color: #ddd;
+}
+
+#basicInfo {
+    margin-bottom: 20px;
+}
+
+#submitButton {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+  }
+
+#permissionsList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .permission {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .permission label {
+    margin-left: 10px;
+  }
+  
+  .permission input[type="radio"] {
+    display: none;
+  }
+  
+  .permission .status-label {
+    display: inline-block;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .permission .status-label.approved {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .permission .status-label.rejected {
+    background-color: #f44336;
+    color: white;
+  }
+
+  .permission .view-details {
+    background-color: #2196F3;
+    color: white;
+  }
+  
+  .permission input[type="radio"]:checked + label.status-label {
+    background-color: #2196F3;
+    color: white;
+  }
+/* Responsive design */
+@media screen and (max-width: 768px) {
+    main {
+        flex-direction: column;
+    }
+
+    .content {
+        margin-left: 0;
+        margin-top: 20px;
+    }
+
+    .sidebar-right {
+        margin-left: 0;
+        margin-top: 20px;
+    }
+}
