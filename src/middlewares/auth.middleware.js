@@ -27,6 +27,15 @@ const isEmployeeLoggedIn = (req, res, next) => {
     }
 }
 
+const isAdminLoggedIn = (req, res, next) => {
+    if (req.session.adminEmail){
+        return next();
+    }else{
+        return res.redirect('/auth/admin-login');
+    }
+}
+
 module.exports = {
-    isEmployeeLoggedIn
+    isEmployeeLoggedIn,
+    isAdminLoggedIn
 };

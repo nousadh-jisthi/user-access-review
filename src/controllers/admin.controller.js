@@ -34,7 +34,19 @@ async function post_set_audit_schedule_job(req, res, next){
     }
 }
 
+async function get_create_audit(req, res, next){
+    res.render('pages/create_audit')
+}
+
+async function get_home(req, res, next){
+    res.render('pages/admin_home', {email: req.session.adminEmail})
+}
+
+// TODO: Add changing password, setting names for admin, and the works
+
+
 module.exports = {
     post_create_audit,
-    post_set_audit_schedule_job
+    post_set_audit_schedule_job,
+    get_home
 };
