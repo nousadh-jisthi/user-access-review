@@ -7,7 +7,7 @@ async function create_audit(audit_name, audit_description, audit_start_date){
 }
 
 async function post_create_audit (req, res, next){
-    try{
+    try{   
         const {audit_name, audit_description, audit_start_date} = req.body
         const response = await create_audit(audit_name, audit_description, audit_start_date)
         res.json({"message": "Audit created successfully!", "audit_id": response})
@@ -32,10 +32,6 @@ async function post_set_audit_schedule_job(req, res, next){
         console.log(error)
         res.json({"message": "Error updating audit schedule!"})
     }
-}
-
-async function get_create_audit(req, res, next){
-    res.render('pages/create_audit')
 }
 
 async function get_home(req, res, next){

@@ -1,1 +1,25 @@
-<h1>Welcome <%= email %></h1>
+<html>
+<head>
+    <title> Home Page </title>
+    
+</html>
+<body>
+    <h1>Welcome <%= email %></h1>
+
+    <form action="/auth/admin-logout" method="post" >
+        <input type="submit" value="Logout">
+    </form>
+    // Form to collect start date and name of audit
+    <form action="/admin/create-audit" method="post">
+        <label> Audit Name </label>
+        <input name="audit_name" type="text" placeholder="Enter audit name">
+
+        <label> Audit Description </label>
+        <input name="audit_description" type="text" placeholder="Enter audit Description">
+
+        <label> Start Date </label>
+        <input name="audit_start_date" type="date" placeholder="Enter start date">
+        
+        <input type="submit" value="Submit">
+    </form>
+</body>

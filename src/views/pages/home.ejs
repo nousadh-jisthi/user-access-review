@@ -1,2 +1,12 @@
-// Display user name in h1 tag
-<h1>Welcome <%= userDn %></h1>
+<html>
+<head>
+    <title> Home Page </title>
+    
+</html>
+<body>
+    <h1>Welcome <%= userDn %></h1>
+
+    <form action="/auth/employee-logout" method="post" >
+        <input type="submit" value="Logout">
+    </form> 
+</body>
