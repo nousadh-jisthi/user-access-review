@@ -76,52 +76,6 @@ h2 {
     cursor: pointer;
   }
 
-#permissionsList {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .permission {
-    display: flex;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #ccc;
-  }
-  
-  .permission label {
-    margin-left: 10px;
-  }
-  
-  .permission input[type="radio"] {
-    display: none;
-  }
-  
-  .permission .status-label {
-    display: inline-block;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  
-  .permission .status-label.approved {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
-  .permission .status-label.rejected {
-    background-color: #f44336;
-    color: white;
-  }
-
-  .permission .view-details {
-    background-color: #2196F3;
-    color: white;
-  }
-  
-  .permission input[type="radio"]:checked + label.status-label {
-    background-color: #2196F3;
-    color: white;
-  }
 /* Responsive design */
 @media screen and (max-width: 768px) {
     main {

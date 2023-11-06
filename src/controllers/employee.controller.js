@@ -6,25 +6,28 @@ require('dotenv').config();
 
 // Function to display all employees by name of manager
 async function employeesUnderManager(managerDn, audit_id){
-    var response = {"manager": managerDn, "employees": []}
-    await Employee.findAll({where: {auditId: audit_id, manager: managerDn}}).then(async function(employees){
-      for (var j = 0; j < employees.length; j++){
-        console.log("* Employee under manager: ", employees[j].cn)
-        var employee = {
-            "cn": employees[j].cn,
-            "dn": employees[j].dn,
-            "manager": employees[j].manager,
-            "groups": []
-        } 
-        // for each user display all the PermissionGroups they are part of
-        const groups = await employees[j].getPermissionGroups({where: {auditId: audit_id}})
-        for (var k = 0; k < groups.length; k++){
-          //console.log("* * Employee belongs to :", groups[k].cn)
-          employee.groups.push(groups[k].cn)
-        }
-        response.employees.push(employee)
-      }
+    var response = {"manager": managerDn, "employees": [], groups: {}}
 
+    await Employee.findAll({where: {auditId: audit_id, manager: managerDn}}).then(async function(employees){
+        for (var j = 0; j < employees.length; j++){
+            var employee = {
+                "cn": employees[j].cn,
+                "dn": employees[j].dn,
+                "manager": employees[j].manager,
+                "groups": []
+            } 
+            // for each user display all the PermissionGroups they are part of
+            const groups = await employees[j].getPermissionGroups({where: {auditId: audit_id}})
+            for (var k = 0; k < groups.length; k++){
+                // TODO: Status should be fetched from database
+                employee.groups.push({id: groups[k].id, status: "pending"})
+                if (!(groups[k].id in response.groups)){
+                    // TOOD: Not send unnecessary data
+                    response.groups[groups[k].id] = {cn: groups[k].cn}
+                }
+            }
+            response.employees.push(employee)
+        }
     })
     console.log(JSON.stringify(response))
     return response

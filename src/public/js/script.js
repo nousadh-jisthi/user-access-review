@@ -15,7 +15,7 @@ const audit_id = document.getElementById('audit').dataset.auditId;
           console.log("Response: " + this.responseText);
           response = JSON.parse(this.responseText)
           const users = response.employees
-          populateUsers(users);
+          populateUsers(users, response.groups);
 
         } else{
           console.log("Error: " + this.responseText);
@@ -34,18 +34,18 @@ const audit_id = document.getElementById('audit').dataset.auditId;
   const submitButton = document.getElementById('submitButton');
   
   // Populate the user list
-  function populateUsers(users){
+  function populateUsers(users, groups){
     
     users.forEach(user => {
       const li = document.createElement('li');
       li.textContent = user.cn;
-      li.addEventListener('click', () => handleUserSelection(user));
+      li.addEventListener('click', () => handleUserSelection(user, groups));
       userList.appendChild(li);
     });
   }
   
   // Handle user selection
-  function handleUserSelection(user) {
+  function handleUserSelection(user, groups) {
     // Clear previous selections
     const selectedUser = userList.querySelector('.selected');
     if (selectedUser) {
@@ -57,14 +57,6 @@ const audit_id = document.getElementById('audit').dataset.auditId;
   
     // Display user information
     userInfo.textContent = `User DN: ${user.dn}\nUser CN: ${user.cn}`;
-  
-    // Fetch permissions for the selected user using API request or other means
-    /*const permissions = [
-      { id: 1, name: 'Permission 1', status: 'Pending' },
-      { id: 2, name: 'Permission 2', status: 'Pending' },
-      { id: 3, name: 'Permission 3', status: 'Pending' },
-      // ...
-    ];*/
 
     const permissions = user.groups;
 
@@ -73,59 +65,84 @@ const audit_id = document.getElementById('audit').dataset.auditId;
     while (permissionsList.firstChild) {
       permissionsList.removeChild(permissionsList.firstChild);
     }
+    while (permissionInfo.firstChild) {
+      permissionInfo.removeChild(permissionInfo.firstChild);
+    }
     
     // TODO: Change permissions to be a json object
     // TODO: Get permission details from database as a separate AJAX request
     permissions.forEach(permission => {
-      const li = document.createElement('li');
-      li.className = 'permission';
-      const input = document.createElement('input');
-      input.type = 'radio';
-      input.name = `permissionStatus-${permission.id}`;
-      input.value = 'approved';
-      input.addEventListener('click', () => {
-        handleChangePermissionStatus(permission, input.value);
+      const tr = document.createElement('tr');  
+      tr.className = 'permission';
+
+      const name_td = document.createElement('td');
+      name_td.textContent = groups[permission.id].cn;
+      tr.appendChild(name_td);
+
+      const approve_td = document.createElement('td');
+      const approve_button = document.createElement('button');
+      const approve_i = document.createElement('i');
+      approve_i.className = 'bi bi-check-circle';
+      approve_button.appendChild(approve_i);
+      approve_button.className = 'btn btn-success';
+      approve_button.addEventListener('click', () => {
+        handleChangePermissionStatus(user.dn, permission, 'approved');
       });
-      li.appendChild(input);
-      const permissionLabel = document.createElement('label');
-      //permissionLabel.textContent = permission.name;
-      permissionLabel.textContent = permission;
-      li.appendChild(permissionLabel);
-      const approvedLabel = document.createElement('label');
-      approvedLabel.className = 'status-label approved';
-      approvedLabel.textContent = 'Approve';
-      //approvedLabel.setAttribute('for', `permissionStatus-${permission.id}`);
-      approvedLabel.setAttribute('for', `permissionStatus-${permission}`);
-      li.appendChild(approvedLabel);
+      approve_td.appendChild(approve_button);
+      tr.appendChild(approve_td);
 
-      const rejectedLabel = document.createElement('label');
-      rejectedLabel.className = 'status-label rejected';
-      rejectedLabel.textContent = 'Reject';
-      //rejectedLabel.setAttribute('for', `permissionStatus-${permission.id}`);
-      approvedLabel.setAttribute('for', `permissionStatus-${permission}`);
-      li.appendChild(rejectedLabel);
+      const reject_td = document.createElement('td');
+      const reject_button = document.createElement('button');
+      const reject_i = document.createElement('i');
+      reject_i.className = 'bi bi-x-circle';
+      reject_button.appendChild(reject_i);
+      reject_button.className = 'btn btn-danger';
+      reject_button.addEventListener('click', () => {
+        handleChangePermissionStatus(user.dn, permission, 'rejected');
+      });
+      reject_td.appendChild(reject_button);
+      tr.appendChild(reject_td);
 
-      const viewDetailsLabel = document.createElement('label');
-      viewDetailsLabel.className = 'status-label view-details';
-      viewDetailsLabel.textContent = 'View Details';
-      viewDetailsLabel.setAttribute('for', `permissionStatus-${permission.id}`);
-      viewDetailsLabel.addEventListener('click', () => handlePermissionSelection(permission));
-      li.appendChild(viewDetailsLabel);
+      const view_td = document.createElement('td');
+      const view_button = document.createElement('button');
+      const view_i = document.createElement('i');
+      view_i.className = 'bi bi-info-circle';
+      view_button.appendChild(view_i);
+      view_button.className = 'btn btn-primary';
+      view_button.addEventListener('click', () => handlePermissionSelection(permission, groups[permission.id]));
+      view_td.appendChild(view_button);
+      tr.appendChild(view_td);
+
+      const status_td = document.createElement('td');
+      const status_label = document.createElement('label');
+      status_label.className = 'status-label';
+      status_label.textContent = permission.status;
+      //status_label.setAttribute('for', `permissionStatus-${permission.id}`);
+      status_label.setAttribute('for', `permissionStatus-${permission.id}`);
+      status_td.appendChild(status_label);
+      tr.appendChild(status_td);
       
-      permissionsList.appendChild(li);
+      permissionsList.appendChild(tr);
+    });
+
+    $(document).ready(function() {
+      $('#datatable').dataTable();
     });
   }
   
   // Handle permission status change
-  function handleChangePermissionStatus(permission, status) {
+  function handleChangePermissionStatus(userDn, permission, status) {
     permission.status = status;
+    const status_label = permissionsList.querySelector(`label[for="permissionStatus-${permission.id}"]`);
+    status_label.textContent = permission.status;
+    // TODO: add status changes to a list and send it to the server when the submit button is clicked
   }
 
   // Handle permission selection
-  function handlePermissionSelection(permission) {
+  function handlePermissionSelection(permission, group) {
     // Display additional information about the selected permission
     permissionInfo.style.display = 'block';
-    permissionInfo.textContent = `Permission ID: ${permission.id}\nPermission Name: ${permission.name}`;
+    permissionInfo.textContent = `Permission ID: ${permission.id}\nPermission Name: ${group.cn}`;
   }
   
   // Handle submit button click
