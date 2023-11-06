@@ -7,5 +7,5 @@ router.get('/get-my-employees', authMiddleware.isEmployeeLoggedIn, employeeContr
 router.get('/home', authMiddleware.isEmployeeLoggedIn, employeeController.get_home);
 router.get('/audit-employees', authMiddleware.isEmployeeLoggedIn, employeeController.get_audit_employees);
 router.post('/bulk-update', authMiddleware.isEmployeeLoggedIn, employeeController.post_bulk_update);
-
+router.get('/on-going-audits-for-manager', authMiddleware.isEmployeeLoggedIn, employeeController.get_on_going_audits_for_manager);
 module.exports = router;

@@ -1,7 +1,8 @@
 const ldap = require('ldapjs');
-const { Employee, PermissionGroup, EmployeeGroup } = require('../../models');
+const { Employee, PermissionGroup, EmployeeGroup, Audit } = require('../../models');
 require('dotenv').config();
 const sequelize = require('../../models/index').sequelize;
+const { Op } = require("sequelize");
 
 // TODO: Add middleware for checking if audit is active
 
@@ -63,6 +64,33 @@ function displayEmployeeByManagers(audit_id){
 })
 }
 
+
+async function on_going_audits_for_manager(managerDn){
+    try{
+        const on_going_audits = await Audit.findAll({where: {
+            completed_at: null,
+            collected_at: {
+                [Op.lte]: new Date()
+            }
+        }})
+        const on_going_audits_for_manager = []
+
+        if (on_going_audits){
+            for (var i = 0; i < on_going_audits.length; i++){
+                const manager_has_employee = await Employee.findOne({where: {auditId: on_going_audits[i].id, manager: managerDn}})
+                if (manager_has_employee != null){
+                    on_going_audits_for_manager.push(on_going_audits[i])
+                }
+            }
+        }
+        return on_going_audits_for_manager
+    }catch(error){
+        console.log(error)
+        return null
+    }
+}
+
+
 async function get_employees_by_manager (req, res, next){
     try{
         const response = await employeesUnderManager(req.query.managerDn, req.query.audit_id)
@@ -85,7 +113,7 @@ async function get_my_employees (req, res, next){
 
 async function get_home(req, res, next){
 
-    res.render('pages/home', {userDn: req.session.userDn})
+    res.render('pages/employee_home', {userDn: req.session.userDn})
 }
 
 async function get_audit_employees(req, res, next){
@@ -124,10 +152,21 @@ async function post_bulk_update(req, res, next){
 }
 
 
+async function get_on_going_audits_for_manager(req, res, next){
+    try{
+        const response = await on_going_audits_for_manager(req.session.userDn)
+        res.json(response)
+    }catch(error){
+        console.log(error)
+        res.status(500).json({"message": "Server Error"})
+    }
+}
+
 module.exports = {
     get_employees_by_manager,
     get_my_employees,
     get_home,
     get_audit_employees,
-    post_bulk_update
+    post_bulk_update,
+    get_on_going_audits_for_manager,
 };
