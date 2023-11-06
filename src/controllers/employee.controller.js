@@ -82,21 +82,6 @@ async function get_my_employees (req, res, next){
     }
 }
 
-async function reject_group(req, res, next){
-    try{
-        const employee = await Employee.findOne({where: {dn: req.body.employyeId}})
-        if(!employee || employee.manager !== req.userDn){
-            return res.status(403).json({"message": "You are not authorized to perform this action"})
-        }
-        const group = await PermissionGroup.findOne({where: {cn: req.body.groupName}})
-
-        // TODO: Change database model, include approved/rejected column in EmployeeGroup table and here set it as false when it is rejected
-        await employee.removePermissionGroup(group)
-        res.json({"message": "success"})
-    }catch(error){
-        res.status(500).json({"message": "Server Error"})
-    }
-}
 
 async function get_home(req, res, next){
 
@@ -142,7 +127,6 @@ async function post_bulk_update(req, res, next){
 module.exports = {
     get_employees_by_manager,
     get_my_employees,
-    reject_group,
     get_home,
     get_audit_employees,
     post_bulk_update
