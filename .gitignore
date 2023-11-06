@@ -131,3 +131,7 @@ dist
 
 #environment
 .env
+
+#temp
+src/public/v*
+src/public/main/*

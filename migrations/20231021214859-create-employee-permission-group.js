@@ -15,6 +15,9 @@ module.exports = {
         type: Sequelize.INTEGER,
         primaryKey: true      
       },
+      isApproved: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

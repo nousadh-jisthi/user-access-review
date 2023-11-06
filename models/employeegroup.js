@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   EmployeeGroup.init({
     auditId: DataTypes.INTEGER,
+    isApproved: DataTypes.BOOLEAN,
   }, {
     sequelize,
     modelName: 'EmployeeGroup',

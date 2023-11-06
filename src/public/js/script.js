@@ -3,7 +3,7 @@
 // Sample data
 
 const audit_id = document.getElementById('audit').dataset.auditId;
-
+var changes = {};
   function getMyEmployees(){
     const xhttp = new XMLHttpRequest();
     // TODO: Make audit_id dynamic
@@ -86,7 +86,7 @@ const audit_id = document.getElementById('audit').dataset.auditId;
       approve_button.appendChild(approve_i);
       approve_button.className = 'btn btn-success';
       approve_button.addEventListener('click', () => {
-        handleChangePermissionStatus(user.dn, permission, 'approved');
+        handleChangePermissionStatus(user.id, permission, 'approved');
       });
       approve_td.appendChild(approve_button);
       tr.appendChild(approve_td);
@@ -98,7 +98,7 @@ const audit_id = document.getElementById('audit').dataset.auditId;
       reject_button.appendChild(reject_i);
       reject_button.className = 'btn btn-danger';
       reject_button.addEventListener('click', () => {
-        handleChangePermissionStatus(user.dn, permission, 'rejected');
+        handleChangePermissionStatus(user.id, permission, 'rejected');
       });
       reject_td.appendChild(reject_button);
       tr.appendChild(reject_td);
@@ -109,7 +109,7 @@ const audit_id = document.getElementById('audit').dataset.auditId;
       view_i.className = 'bi bi-info-circle';
       view_button.appendChild(view_i);
       view_button.className = 'btn btn-primary';
-      view_button.addEventListener('click', () => handlePermissionSelection(permission, groups[permission.id]));
+      view_button.addEventListener('click', () => handlePermissionSelection(user.id, permission, groups[permission.id]));
       view_td.appendChild(view_button);
       tr.appendChild(view_td);
 
@@ -131,11 +131,33 @@ const audit_id = document.getElementById('audit').dataset.auditId;
   }
   
   // Handle permission status change
-  function handleChangePermissionStatus(userDn, permission, status) {
+  function handleChangePermissionStatus(userId, permission, status) {
     permission.status = status;
     const status_label = permissionsList.querySelector(`label[for="permissionStatus-${permission.id}"]`);
     status_label.textContent = permission.status;
-    // TODO: add status changes to a list and send it to the server when the submit button is clicked
+
+    var isApproved = null;
+    if (permission.status == "approved"){
+      isApproved = true;
+    } else if (permission.status == "rejected"){
+      isApproved = false;
+    }
+    
+    if (changes[userId] == undefined){
+      changes[userId] = [{userId: userId, permissionGroupId: permission.id, isApproved: isApproved}];
+    }else{
+      var found = false;
+      changes[userId].some(change => {
+        if (change.permissionGroupId == permission.id){
+          change.isApproved = isApproved;
+          found = true;
+          return found;
+        }
+      });
+      if (found == false){
+        changes[userId].push({userId: userId, permissionGroupId: permission.id, isApproved: isApproved});
+      }
+    }
   }
 
   // Handle permission selection
@@ -147,17 +169,12 @@ const audit_id = document.getElementById('audit').dataset.auditId;
   
   // Handle submit button click
   submitButton.addEventListener('click', () => {
-    const selectedUser = userList.querySelector('.selected');
-    const permissions = permissionsList.querySelectorAll('.permission');
-    if (selectedUser && permissions.length > 0) {
-      const userId = selectedUser.textContent;
-      const permissionStatuses = Array.from(permissions).map(permission => {
-        const permissionName = permission.querySelector('label:not(.status-label)').textContent;
-        const permissionStatus = permission.querySelector(`input[name="permissionStatus-${permission.id}"]:checked`).value;
-        return { name: permissionName, status: permissionStatus };
-      });
-  
-      console.log('User ID:', userId);
-      console.log('Permission statuses:', permissionStatuses);
-    }
+    console.log(changes);
+    $.post('/employee/bulk-update', {auditId: audit_id, changes: changes}, function(data, status){
+      if (status == "success"){
+        alert("Changes saved successfully");
+      }else{
+        alert("Error saving changes");
+      }
+    });
   });
