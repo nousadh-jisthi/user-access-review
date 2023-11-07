@@ -130,6 +130,17 @@ async function on_going_audits_for_manager(managerDn){
     }
 }
 
+async function audit_completion_update(audit_id){
+    const inprogress = await EmployeeGroup.findOne({where: {auditId: audit_id, isApproved: null}})
+    if (inprogress != null){
+        return;
+    } else{
+        const audit = await Audit.findOne({where: {id: audit_id}})
+        audit.completed_at = new Date()
+        await audit.save()
+    }
+}
+
 
 async function get_employees_by_manager (req, res, next){
     try{
@@ -182,6 +193,7 @@ async function post_bulk_update(req, res, next){
         });
 
         await t.commit();
+        audit_completion_update(auditId)
         res.json({"message": "success"})
     }catch(error){
         await t.rollback();
