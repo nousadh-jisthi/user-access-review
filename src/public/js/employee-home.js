@@ -40,9 +40,7 @@ function populateAudits(audits){
         tr.appendChild(auditStartDate);
 
         const auditStatus = document.createElement('td');
-        // TODO: get audit status from data
-        //auditStatus.textContent = audit.status;
-        auditStatus.textContent = "ongoing";
+        auditStatus.textContent = audit.status;
         tr.appendChild(auditStatus);
 
         const auditLink = document.createElement('td');

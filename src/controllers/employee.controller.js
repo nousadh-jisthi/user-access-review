@@ -64,6 +64,37 @@ function displayEmployeeByManagers(audit_id){
 })
 }
 
+async function check_manager_review_status(audit_id, managerDn){
+    const employees = await Employee.findAll({
+        where: {
+            manager: managerDn,
+            auditId: audit_id,
+        },
+        include: [
+          {
+            model: PermissionGroup,
+            attributes: [],
+            through: {
+              attributes: ['isApproved'],
+              where: {  
+                isApproved: null, 
+              },
+            },
+            required: true,
+          },
+        ],
+      })
+
+    if (employees.length > 0) {
+        // The employees with unapproved permissions under the manager are in the employees array
+        // console.log('Employees with unapproved permissions:', employees);
+        return employees;
+    } else {
+        // console.log('No employees found for the manager with ID', managerDn);
+        return null;
+    }
+    
+}
 
 async function on_going_audits_for_manager(managerDn){
     try{
@@ -79,6 +110,15 @@ async function on_going_audits_for_manager(managerDn){
             for (var i = 0; i < on_going_audits.length; i++){
                 const manager_has_employee = await Employee.findOne({where: {auditId: on_going_audits[i].id, manager: managerDn}})
                 if (manager_has_employee != null){
+                    const ongoing_reviews = await check_manager_review_status(on_going_audits[i].id, managerDn)
+                    //console.log(ongoing_reviews)
+                    if(ongoing_reviews != null){
+                        on_going_audits[i].dataValues.status = "pending"
+                    }
+                    else{
+                        on_going_audits[i].dataValues.status = "completed"
+                    }
+                    //console.log(on_going_audits[i])
                     on_going_audits_for_manager.push(on_going_audits[i])
                 }
             }
