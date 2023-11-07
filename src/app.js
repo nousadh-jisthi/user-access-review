@@ -34,10 +34,6 @@ app.use('/admin', adminRouter);
 const authRouter = require('./routes/auth.route');
 app.use('/auth', authRouter);
 
-const auditService = require('./services/audit.service');
-//auditService.collect_audit_data(1);
-
-
 const auditScheduler = require('./schedulers/audit.scheduler');
 auditScheduler.initialize();
 

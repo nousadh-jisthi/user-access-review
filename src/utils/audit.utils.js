@@ -1,7 +1,8 @@
-const ldapUtils = require('../utils/ldap.utils');
+const ldapUtils = require('./ldap.utils');
 const {Audit} = require('../../models')
 const { Op } = require('sequelize')
 require('dotenv').config();
+
 
 async function collect_audit_data(audit_id){
     try{

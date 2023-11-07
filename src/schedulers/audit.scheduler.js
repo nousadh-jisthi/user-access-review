@@ -2,14 +2,14 @@
 const schedule = require('node-schedule');
 const {ScheduledJob} = require('../../models')
 
-const auditService = require('../services/audit.service')
+const auditUtil = require('../utils/audit.utils')
 
 async function run_any_pending_audit(){
     try{
-        const audit = await auditService.check_pending_audit();
+        const audit = await auditUtil.check_pending_audit();
         if (audit){
             console.log(audit.id)
-            auditService.collect_audit_data(audit.id);
+            auditUtil.collect_audit_data(audit.id);
         }
     }catch(err){
       console.log(err)
