@@ -37,20 +37,8 @@ app.use('/auth', authRouter);
 const auditScheduler = require('./schedulers/audit.scheduler');
 auditScheduler.initialize();
 
-// TODO: Move this section to admin utils
-// Create admin user if not exists
-function createAdmin(){
-	Admin.findAll().then(function(admins){
-		if(admins.length == 0){
-			passwordHash = bcrypt.hashSync(process.env.ADMIN_PASS, 10);
-			Admin.create({
-				email: process.env.ADMIN_EMAIL,
-				password: passwordHash
-			});
-		}
-	});
-}
-createAdmin();
+const adminUtils = require('./utils/admin.utils');
+adminUtils.createAdmin();
 
 const server = app.listen( app_port , app_host, function(){
   console.log('Listening on port ' + server.address().port);
