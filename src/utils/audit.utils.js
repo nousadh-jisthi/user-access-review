@@ -1,5 +1,5 @@
 const ldapUtils = require('./ldap.utils');
-const {Audit} = require('../../models')
+const {Audit, EmployeeGroup} = require('../../models')
 const { Op } = require('sequelize')
 require('dotenv').config();
 
@@ -39,7 +39,19 @@ async function check_pending_audit() {
     });
 }
 
+async function audit_completion_update(audit_id){
+    const inprogress = await EmployeeGroup.findOne({where: {auditId: audit_id, isApproved: null}})
+    if (inprogress != null){
+        return;
+    } else{
+        const audit = await Audit.findOne({where: {id: audit_id}})
+        audit.completed_at = new Date()
+        await audit.save()
+    }
+}
+
 module.exports = {
     collect_audit_data,
-    check_pending_audit
+    check_pending_audit,
+    audit_completion_update
 };
