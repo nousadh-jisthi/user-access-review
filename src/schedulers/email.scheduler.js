@@ -18,8 +18,8 @@ async function send_any_pending_emails(){
             managerDns.forEach(async (managerDn) => {
                 // If manager has not approved/rejected any employee group, send email
                 if (managerDn != null){
-                    const managerEmployeesPending = await employeeService.check_manager_review_status(audit.id, managerDn.manager)
-                    if (managerEmployeesPending != null){
+                    const isCompleted = await employeeService.is_manager_review_completed(audit.id, managerDn.manager)
+                    if (isCompleted == false){
                             const manager = await Employee.findOne({where: {dn: managerDn.manager, auditId: audit.id}})
                             emailUtils.sendMail(manager.mail, "User Access Review Pending for Audit"+audit.id, "Please review the permission groups for your employees.")
                         }

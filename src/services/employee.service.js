@@ -34,7 +34,6 @@ async function employeesUnderManager(managerDn, audit_id){
             response.employees.push(employee)
         }
     })
-    console.log(JSON.stringify(response))
     return response
 }
 
@@ -43,23 +42,19 @@ function displayEmployeeByManagers(audit_id){
     Employee.findAll({attributes: ['manager'], group: ['manager'], where: {
         auditId: audit_id
     }}).then(async function(managers){
-    console.log(JSON.stringify(managers))
     for (var i = 0; i < managers.length; i++){
     const employees = await Employee.findAll({where: {auditId: audit_id, manager: managers[i].manager}})
-    console.log("Manager: " + managers[i].manager);
     for (var j = 0; j < employees.length; j++){
-        console.log("* Employee under manager: ", employees[j].cn)
         // for each employee display all the PermissionGroups they are part of
         const groups = await employees[j].getPermissionGroups()
         for (var k = 0; k < groups.length; k++){
-        console.log("* * Employee belongs to :", groups[k].cn)
         }
     }
     }
 })
 }
 
-async function check_manager_review_status(audit_id, managerDn){
+async function pending_manager_reviews(audit_id, managerDn){
     const employees = await Employee.findAll({
         where: {
             manager: managerDn,
@@ -91,6 +86,34 @@ async function check_manager_review_status(audit_id, managerDn){
     
 }
 
+async function is_manager_review_completed(audit_id, managerDn){
+    const hasEmployee = await Employee.findOne({
+        where: {
+            manager: managerDn,
+            auditId: audit_id,
+        },
+        include: [
+          {
+            model: PermissionGroup,
+            attributes: [],
+            through: {
+              attributes: ['isApproved'],
+              where: {  
+                isApproved: null, 
+              },
+            },
+            required: true,
+          },
+        ],
+      })
+    if (hasEmployee) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+
 async function on_going_audits_for_manager(managerDn){
     try{
         const on_going_audits = await Audit.findAll({where: {
@@ -105,15 +128,8 @@ async function on_going_audits_for_manager(managerDn){
             for (var i = 0; i < on_going_audits.length; i++){
                 const manager_has_employee = await Employee.findOne({where: {auditId: on_going_audits[i].id, manager: managerDn}})
                 if (manager_has_employee != null){
-                    const ongoing_reviews = await check_manager_review_status(on_going_audits[i].id, managerDn)
-                    //console.log(ongoing_reviews)
-                    if(ongoing_reviews != null){
-                        on_going_audits[i].dataValues.status = "pending"
-                    }
-                    else{
-                        on_going_audits[i].dataValues.status = "completed"
-                    }
-                    //console.log(on_going_audits[i])
+                    const isCompleted = await is_manager_review_completed(on_going_audits[i].id, managerDn)
+                    on_going_audits[i].dataValues.status = isCompleted ? "completed" : "pending" 
                     on_going_audits_for_manager.push(on_going_audits[i])
                 }
             }
@@ -135,8 +151,8 @@ async function update_permission(auditId, userId, permissionGroupId, isApproved)
 module.exports = {
     employeesUnderManager,
     displayEmployeeByManagers,
-    check_manager_review_status,
+    pending_manager_reviews,
+    is_manager_review_completed,
     on_going_audits_for_manager,
-    update_permission
-
+    update_permission,
 }
