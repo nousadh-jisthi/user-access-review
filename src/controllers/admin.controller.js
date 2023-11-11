@@ -10,9 +10,12 @@ async function post_create_audit (req, res, next){
     try{   
         const {audit_name, audit_description, audit_start_date} = req.body
         const response = await create_audit(audit_name, audit_description, audit_start_date)
-        res.json({"message": "Audit created successfully!", "audit_id": response})
+        // TODO: Add success message
+        // redirect to home page
+        res.redirect('/admin/home')
     }catch(error){
         console.log(error)
+        res.status(500).json({"message": "Server Error!"})
     }
 }
 
@@ -38,11 +41,18 @@ async function get_home(req, res, next){
     res.render('pages/admin_home', {email: req.session.adminEmail})
 }
 
+// Function to retrieve information about all audits
+async function get_all_audits(req, res, next){
+    const audits = await Audit.findAll()
+    res.json(audits)
+}
+
 // TODO: Add changing password, setting names for admin, and the works
 
 
 module.exports = {
     post_create_audit,
     post_set_audit_schedule_job,
-    get_home
+    get_home,
+    get_all_audits
 };
