@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     auditDescription: DataTypes.STRING,
     auditStartDate: DataTypes.DATE,
     collected_at: DataTypes.DATE,
+    last_emailed_at: DataTypes.DATE,
     completed_at: DataTypes.DATE
   }, {
     sequelize,

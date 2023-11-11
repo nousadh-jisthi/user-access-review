@@ -51,7 +51,8 @@ async function getAllEmployees(audit_id, successCallback, errorCallback) {
     var opts = {
         filter: '(objectClass=inetOrgPerson)',  //simple search
         scope: 'sub',
-        attributes: ['sn', 'cn', 'uid', 'manager']
+        // TODO: Include title in the future
+        attributes: ['sn', 'cn', 'uid', 'manager','mail' ]
     };
   
     client.search('ou=users,ou=system', opts, function (err, res) {

@@ -37,6 +37,9 @@ app.use('/auth', authRouter);
 const auditScheduler = require('./schedulers/audit.scheduler');
 auditScheduler.initialize();
 
+const emailScheduler = require('./schedulers/email.scheduler');
+emailScheduler.initialize();
+
 const adminUtils = require('./utils/admin.utils');
 adminUtils.createAdmin();
 

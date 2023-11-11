@@ -21,6 +21,9 @@ module.exports = {
       collected_at:{
         type: Sequelize.DATE
       },
+      last_emailed_at:{
+        type: Sequelize.DATE
+      },
       completed_at:{
         type: Sequelize.DATE
       },

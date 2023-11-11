@@ -21,6 +21,9 @@ module.exports = {
       manager: {
         type: Sequelize.STRING
       },
+      mail:{
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
