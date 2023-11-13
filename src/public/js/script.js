@@ -1,12 +1,9 @@
 // JavaScript to populate the user list and handle user selection
 
-// Sample data
-
 const audit_id = document.getElementById('audit').dataset.auditId;
 var changes = {};
   function getMyEmployees(){
     const xhttp = new XMLHttpRequest();
-    // TODO: Make audit_id dynamic
     xhttp.open("GET", "/employee/get-my-employees?audit_id="+audit_id, true);
     xhttp.send();
     xhttp.onreadystatechange = function() {
@@ -109,7 +106,7 @@ var changes = {};
       view_i.className = 'bi bi-info-circle';
       view_button.appendChild(view_i);
       view_button.className = 'btn btn-primary';
-      view_button.addEventListener('click', () => handlePermissionSelection(user.id, permission, groups[permission.id]));
+      view_button.addEventListener('click', () => handlePermissionSelection(permission.id, groups[permission.id]));
       view_td.appendChild(view_button);
       tr.appendChild(view_td);
 
@@ -161,10 +158,33 @@ var changes = {};
   }
 
   // Handle permission selection
-  function handlePermissionSelection(permission, group) {
+  function handlePermissionSelection(permissionId, permission) {
     // Display additional information about the selected permission
+    while (permissionInfo.firstChild) {
+      permissionInfo.removeChild(permissionInfo.firstChild);
+    }
     permissionInfo.style.display = 'block';
-    permissionInfo.textContent = `Permission ID: ${permission.id}\nPermission Name: ${group.cn}`;
+    
+    const permissionDiv = document.createElement('div');
+
+    const pPermissionId = document.createElement('p')
+    pPermissionId.textContent = `Permission ID: ${permissionId}`;
+    permissionDiv.appendChild(pPermissionId);
+
+    const pPermissionName = document.createElement('p')
+    pPermissionName.textContent = `Name: ${permission.cn}`;
+    permissionDiv.appendChild(pPermissionName);
+
+    const pPermissionDn = document.createElement('p')
+    pPermissionDn.textContent = `DN: ${permission.dn}`;
+    permissionDiv.appendChild(pPermissionDn);
+
+    const pPermissionDescription = document.createElement('p')
+    pPermissionDescription.textContent = `Description: ${permission.description}`;
+    permissionDiv.appendChild(pPermissionDescription);
+
+    permissionInfo.appendChild(permissionDiv);
+    
   }
   
   // Handle submit button click
