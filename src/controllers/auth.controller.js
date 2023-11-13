@@ -85,7 +85,7 @@ async function post_employee_login(req, res, next){
 async function post_employee_logout(req, res, next){
     try{
         req.session.destroy();
-        res.redirect('/auth/employee-login')
+        res.redirect('/auth/login')
     }catch(error){
         console.log(error)
         res.status(500).json({"message": "Server Error"})
@@ -116,16 +116,21 @@ async function post_admin_login(req, res, next){
 async function post_admin_logout(req, res, next){
     try{
         req.session.destroy();
-        res.redirect('/auth/admin-login')
+        res.redirect('/auth/login')
     }catch(error){
         console.log(error)
         res.status(500).json({"message": "Server Error"})
     }
 }
 
+async function get_login(req, res, next){
+    res.render('pages/login')
+}
+
 module.exports = {
     post_employee_login,
     post_employee_logout,
     post_admin_login,
-    post_admin_logout
+    post_admin_logout,
+    get_login
 };
