@@ -103,7 +103,7 @@ function getAllPermissionGroups(audit_id){
       // TODO: Update filter to include other group object classes
       filter: '(objectClass=groupOfUniqueNames)',
       scope: 'sub',
-      attributes: ['cn', 'uniqueMember']
+      attributes: ['cn', 'uniqueMember', 'description']
     };
     
     client.search('ou=groups,ou=system', opts, async function (err, res) {
@@ -151,10 +151,8 @@ function parsePermissionGroup(entry, audit_id){
     console.log(JSON.stringify(group))
     PermissionGroup.create(group).then(async function(group) {
         for (var i = 0; i < members.length; i++){
-        console.log(members[i])
         const employee = await Employee.findOne({where: {auditId: audit_id, dn: members[i]}})
         if (employee){
-            console.log("Employee found")
             EmployeeGroup.create({employeeId: employee.id, permissiongroupId: group.id, auditId: audit_id})
         }
         }

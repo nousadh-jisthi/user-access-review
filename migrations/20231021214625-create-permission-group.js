@@ -12,7 +12,13 @@ module.exports = {
       auditId: {
         type: Sequelize.INTEGER
       },
+      dn: {
+        type: Sequelize.STRING
+      },
       cn: {
+        type: Sequelize.STRING
+      },
+      description: {
         type: Sequelize.STRING
       },
       createdAt: {

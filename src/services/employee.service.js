@@ -28,7 +28,7 @@ async function employeesUnderManager(managerDn, audit_id){
                 employee.groups.push({id: groups[k].id, status: status})
                 if (!(groups[k].id in response.groups)){
                     // TOOD: Not send unnecessary data
-                    response.groups[groups[k].id] = {cn: groups[k].cn}
+                    response.groups[groups[k].id] = {cn: groups[k].cn, dn: groups[k].dn, description: groups[k].description}
                 }
             }
             response.employees.push(employee)

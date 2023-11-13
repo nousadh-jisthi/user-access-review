@@ -16,7 +16,9 @@ module.exports = (sequelize, DataTypes) => {
   }
   PermissionGroup.init({
     auditId: DataTypes.INTEGER,
-    cn: DataTypes.STRING
+    dn: DataTypes.STRING,
+    cn: DataTypes.STRING,
+    description: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'PermissionGroup',
