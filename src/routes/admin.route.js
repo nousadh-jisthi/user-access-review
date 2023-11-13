@@ -8,5 +8,6 @@ router.get('/home', authMiddleware.isAdminLoggedIn, adminController.get_home)
 router.get('/all-audits', authMiddleware.isAdminLoggedIn, adminController.get_all_audits)
 router.get('/view-audit', authMiddleware.isAdminLoggedIn, adminController.get_view_audit)
 router.get('/audit-details', authMiddleware.isAdminLoggedIn, adminController.get_audit_details)
+router.get('/audit-report', authMiddleware.isAdminLoggedIn, adminController.get_audit_report)
 
 module.exports = router;

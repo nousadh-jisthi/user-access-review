@@ -76,6 +76,14 @@ h2 {
     cursor: pointer;
   }
 
+#exportReportButton {
+    background-color: #4566c7;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
 /* Responsive design */
 @media screen and (max-width: 768px) {
     main {

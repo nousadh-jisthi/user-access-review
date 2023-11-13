@@ -1,5 +1,6 @@
 const managerList = document.getElementById('managersList');
 const audit_id = document.getElementById('audit').dataset.auditId;
+const exportReportButton = document.getElementById('exportReportButton');
 
 function getAuditDetails(){
     const xhttp = new XMLHttpRequest();
@@ -50,3 +51,7 @@ function populateAuditDetails(managers){
 }
 
 getAuditDetails();
+
+exportReportButton.addEventListener('click', function(){
+    window.open("/admin/audit-report?audit_id="+audit_id);
+});
