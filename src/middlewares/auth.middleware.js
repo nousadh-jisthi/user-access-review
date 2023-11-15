@@ -23,7 +23,7 @@ const isEmployeeLoggedIn = (req, res, next) => {
     if (req.session.userDn){
         return next();
     }else{
-        return res.redirect('/auth/employee-login');
+        return res.redirect('/auth/login');
     }
 }
 
@@ -31,7 +31,7 @@ const isAdminLoggedIn = (req, res, next) => {
     if (req.session.adminEmail){
         return next();
     }else{
-        return res.redirect('/auth/admin-login');
+        return res.redirect('/auth/login');
     }
 }
 

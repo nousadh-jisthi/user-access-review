@@ -1,4 +1,6 @@
 const auditList = document.getElementById('auditList');
+const navLogoutButton = document.getElementById('navLogoutButton');
+const navLogoutForm = document.getElementById('navLogoutForm');
 
 function getAudits(){
     const xhttp = new XMLHttpRequest();
@@ -69,3 +71,7 @@ function populateAudits(audits){
 }
 
 getAudits();
+
+navLogoutButton.addEventListener('click', function(){
+    navLogoutForm.submit();
+});

@@ -1,41 +1,10 @@
-<html>
-<head>
-<title>User Access Review</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" data-no-delete="yes" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <style>
-        html, body {
-          width: 100%;
-          height: 100%;
-          margin: 0;
-          padding: 0;
-        }
-        body {
-        -webkit-font-smoothing: antialiased;
-				-moz-osx-font-smoothing: grayscale;
-            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-        }
-        *,
-			::before,
-			::after {
-				box-sizing: border-box;
-				border-width: 0;
-				border-style: solid;
-				border-color: #ffffff;
-			}
-      </style>
+<%- include('../partials/top.ejs') %>
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
+    <title>User Access Review</title>
 </head>
 <body>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-
-
-
-<nav class="navbar navbar-dark bg-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">User Access Review</a>
-    </div>
-</nav>
+<%- include('../partials/nav.ejs') %>
 
 
 <div class="container">
@@ -53,7 +22,7 @@
             </div>
             <div class="mb-3">
               <label for="password" class="form-label">Password</label>
-              <input name="password" type="password" class="form-control" id="userpassword">
+              <input name="password" type="password" class="form-control" id="userpassword" required>
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
           </form>
@@ -69,11 +38,11 @@
             <form action="/auth/admin-login" method="post">
               <div class="mb-3">
                 <label for="email" class="form-label">Admin's email</label>
-                <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp">
+                <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" required>
               </div>
               <div class="mb-3">
                 <label for="adminpassword" class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" id="adminpassword">
+                <input type="password" name="password" class="form-control" id="adminpassword" required>
               </div>
               <button type="submit" class="btn btn-success">Login</button>
             </form>

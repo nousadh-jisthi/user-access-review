@@ -66,8 +66,6 @@ var changes = {};
       permissionInfo.removeChild(permissionInfo.firstChild);
     }
     
-    // TODO: Change permissions to be a json object
-    // TODO: Get permission details from database as a separate AJAX request
     permissions.forEach(permission => {
       const tr = document.createElement('tr');  
       tr.className = 'permission';
@@ -177,6 +175,8 @@ var changes = {};
 
     const pPermissionDn = document.createElement('p')
     pPermissionDn.textContent = `DN: ${permission.dn}`;
+    pPermissionDn.style.wordBreak= 'break-all';
+    pPermissionDn.style.whiteSpace = 'normal'
     permissionDiv.appendChild(pPermissionDn);
 
     const pPermissionDescription = document.createElement('p')

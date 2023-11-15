@@ -1,0 +1,20 @@
+<nav class="navbar navbar-dark bg-dark justify-content-between">
+      <a class="navbar-brand" href="#">User Access Review</a>
+      
+      <% if(typeof(isAdmin) !="undefined") { %>
+      <form id="navLogoutForm" class="form-inline" method="post" 
+      <% if (isAdmin) { %>
+        action="/auth/admin-logout"
+      <% } else { %>
+        action="/auth/employee-logout"
+      <% } %>
+      >
+        <span class="navbar-text">
+          Welcome, <%= name %>
+        </span>
+        <button id="navLogoutButton" class="btn btn-light my-2 my-sm-0" type="submit">Logout</button>
+      </form>
+      <% } %>
+    <!-- add a drop down in the navigation bar on the right corner-->
+    
+</nav>

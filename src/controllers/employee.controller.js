@@ -34,7 +34,7 @@ async function get_home(req, res, next){
 }
 
 async function get_audit_employees(req, res, next){
-    res.render('pages/audit_employees',{audit_id: req.query.audit_id} )
+    res.render('pages/audit_employees',{audit_id: req.query.audit_id, userDn: req.session.userDn} )
 }
 
 async function post_bulk_update(req, res, next){

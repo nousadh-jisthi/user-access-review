@@ -89,7 +89,7 @@ async function get_audit_details(req, res, next){
 
 async function get_view_audit(req, res, next){
     const audit = await Audit.findOne({where: {id: req.query.audit_id}})
-    return res.render('pages/audit_details', {audit: audit})
+    return res.render('pages/audit_details', {audit: audit, email: req.session.adminEmail})
 }
 
 async function get_audit_report(req, res, next){
