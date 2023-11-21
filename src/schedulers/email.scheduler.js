@@ -3,6 +3,7 @@ const { Audit, Employee, ScheduledJob} = require('../../models');
 const auditUtils = require('../utils/audit.utils');
 const employeeService = require('../services/employee.service');
 const emailUtils = require('../utils/email.utils');
+const { renderFile } = require('ejs');
 
 async function send_any_pending_emails(){
     const incomplete_audits = await auditUtils.list_incomplete_audits();
@@ -21,7 +22,8 @@ async function send_any_pending_emails(){
                     const isCompleted = await employeeService.is_manager_review_completed(audit.id, managerDn.manager)
                     if (isCompleted == false){
                             const manager = await Employee.findOne({where: {dn: managerDn.manager, auditId: audit.id}})
-                            emailUtils.sendMail(manager.mail, "User Access Review Pending for Audit"+audit.id, "Please review the permission groups for your employees.")
+                            const html_data = await renderFile(__dirname+'/../views/pages/email.ejs', {managerDn: manager.dn});
+                            emailUtils.sendMail(manager.mail, "User Access Review Pending for Audit "+audit.id,html_data)
                         }
                     }
                 });
