@@ -87,6 +87,22 @@ async function get_audit_details(req, res, next){
     res.json(managersMap)
 }
 
+async function employees_without_managers(audit_id){
+    const employees = await Employee.findAll({
+        where: {
+            auditId: audit_id,
+            manager: null
+        }
+    })
+    return employees
+}
+
+async function get_employees_without_managers(req, res, next){
+    const audit_id = req.query.audit_id
+    const employees = await employees_without_managers(audit_id)
+    return res.json(employees)
+}
+
 async function get_view_audit(req, res, next){
     const audit = await Audit.findOne({where: {id: req.query.audit_id}})
     return res.render('pages/audit_details', {audit: audit, email: req.session.adminEmail})
@@ -135,6 +151,22 @@ async function get_audit_report(req, res, next){
 
 // TODO: Add changing password, setting names for admin, and the works
 
+async function update_employee_managers (changes, audit_id){
+    for (var employee_id of Object.keys(changes)){
+        console.log(employee_id, changes[employee_id])
+        const employee = await Employee.findOne({where: {id: employee_id, auditId: audit_id}})
+        employee.manager = changes[employee_id]
+        await employee.save()
+    }
+}
+
+async function post_update_employee_managers(req, res, next){
+    const changes = req.body.changes
+    const audit_id = req.body.audit_id
+    console.log(changes, audit_id)
+    await update_employee_managers(changes, audit_id)
+    res.json({"message": "Changes saved successfully!"})
+}
 
 module.exports = {
     post_create_audit,
@@ -143,5 +175,7 @@ module.exports = {
     get_all_audits,
     get_view_audit,
     get_audit_details,
-    get_audit_report
+    get_audit_report,
+    get_employees_without_managers,
+    post_update_employee_managers
 };

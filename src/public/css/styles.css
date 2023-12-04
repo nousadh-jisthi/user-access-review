@@ -89,6 +89,14 @@ h2 {
     cursor: pointer;
 }
 
+#saveChangesButton {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
 /* Responsive design */
 @media screen and (max-width: 768px) {
     main {

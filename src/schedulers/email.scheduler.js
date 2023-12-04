@@ -18,7 +18,7 @@ async function send_any_pending_emails(){
             }})
             managerDns.forEach(async (managerDn) => {
                 // If manager has not approved/rejected any employee group, send email
-                if (managerDn != null){
+                if (managerDn.manager != null){
                     const isCompleted = await employeeService.is_manager_review_completed(audit.id, managerDn.manager)
                     if (isCompleted == false){
                             const manager = await Employee.findOne({where: {dn: managerDn.manager, auditId: audit.id}})

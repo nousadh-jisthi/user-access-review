@@ -55,7 +55,7 @@ async function getAllEmployees(audit_id, successCallback, errorCallback) {
         attributes: ['sn', 'cn', 'uid', 'manager','mail' ]
     };
   
-    client.search('ou=users,ou=system', opts, function (err, res) {
+    client.search(process.env.BASE_DN, opts, function (err, res) {
         if (err) {
             console.log("Error in search " + err)
         } else {
@@ -106,7 +106,7 @@ function getAllPermissionGroups(audit_id){
       attributes: ['cn', 'uniqueMember', 'description']
     };
     
-    client.search('ou=groups,ou=system', opts, async function (err, res) {
+    client.search(process.env.BASE_DN , opts, async function (err, res) {
       if (err) {
           console.log("Error in search " + err)
           reject(err)
