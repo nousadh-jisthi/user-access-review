@@ -29,7 +29,8 @@ var changes = {};
   const permissionsList = document.getElementById('permissionsList');
   const permissionInfo = document.getElementById('permissionInfo');
   const submitButton = document.getElementById('submitButton');
-  
+  const alertPlaceholder = document.getElementById('alertPlaceholder')
+
   // Populate the user list
   function populateUsers(users, groups){
     
@@ -187,14 +188,28 @@ var changes = {};
     
   }
   
+  const createAlert = (message, type) => {
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = `
+      <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    `;
+    alertPlaceholder.appendChild(wrapper);
+  }
+
   // Handle submit button click
   submitButton.addEventListener('click', () => {
     console.log(changes);
     $.post('/employee/bulk-update', {auditId: audit_id, changes: changes}, function(data, status){
+      console.log(data, status);
       if (status == "success"){
-        alert("Changes saved successfully");
+        createAlert("Changes saved successfully", "success");
       }else{
-        alert("Error saving changes");
+        createAlert("Error saving changes", "danger");
       }
+    }).fail(function() {
+      createAlert("Error saving changes", "danger");
     });
   });
