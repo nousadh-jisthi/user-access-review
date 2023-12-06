@@ -2,6 +2,18 @@
       <a class="navbar-brand" href="#">User Access Review</a>
       
       <% if(typeof(isAdmin) !="undefined") { %>
+        <ul class="navbar-nav mr-auto"> 
+          <li class="nav-item">
+            <a class="nav-link" 
+            <% if (isAdmin) { %>
+              href="/admin/home/"
+            <% } else { %>
+              href="/employee/home/"
+            <% } %>
+            >Home</a>
+          </li>
+          </ul>
+      
       <form id="navLogoutForm" class="form-inline" method="post" 
       <% if (isAdmin) { %>
         action="/auth/admin-logout"
