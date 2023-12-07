@@ -98,9 +98,9 @@ function getAllPermissionGroups(audit_id){
   return new Promise((resolve, reject) => {
     var opts = {
       // TODO: Update filter to include other group object classes
-      filter: '(objectClass=groupOfUniqueNames)',
+      filter: '(objectClass=groupOfNames)',
       scope: 'sub',
-      attributes: ['cn', 'uniqueMember', 'description']
+      attributes: ['cn', 'member', 'description']
     };
     
     client.search(process.env.BASE_DN , opts, async function (err, res) {
@@ -136,7 +136,7 @@ function parsePermissionGroup(entry, audit_id){
     group["dn"] = entry.pojo.objectName
     group["auditId"] = audit_id
     attributes.forEach(attribute => {
-        if (attribute.type == "uniqueMember"){
+        if (attribute.type == "member"){
         members = attribute.values
         }
         else{
