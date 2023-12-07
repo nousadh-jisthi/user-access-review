@@ -4,7 +4,7 @@
 <body>
     <%- include('../partials/nav.ejs', {name: email, isAdmin: true}) %>
     <header id="audit" data-audit-id="<%= audit.id %>">
-        <h1>User Access Review - Audit <%= audit.id %></h1>
+        <h1>User Access Review - Review <%= audit.id %></h1>
     </header>
     <main>       
         <div class="content">
@@ -12,25 +12,25 @@
                 <div id="userInfo">
                     <div class="card">
                         <div class="card-header">
-                            Audit Details
+                            Review Details
                         </div>
                         <div class="card-body">
                             <!-- List name, and other audit information -->
                             <div id="auditInfo">
                                 <div id="auditName">
-                                    <p id="auditNameText"><b>Audit Name:</b> <%= audit.auditName %></p>
+                                    <p id="auditNameText"><b>Name:</b> <%= audit.auditName %></p>
                                 </div>
                                 <div id="auditDescription">
-                                    <p id="auditDescriptionText"><b>Audit Description:</b><%= audit.auditDescription %></p>
+                                    <p id="auditDescriptionText"><b>Description:</b><%= audit.auditDescription %></p>
                                 </div>
                                 <div id="auditStartDate">
-                                    <p id="auditStartDateText"><b>Audit Start Date: </b><%= audit.auditStartDate %></p>
+                                    <p id="auditStartDateText"><b>Start Date: </b><%= audit.auditStartDate %></p>
                                 </div>
                                 <div id="auditCollectedAt">
-                                    <p id="auditStatusText"><b>Audit Collected at : </b><%= audit.collected_at %></p>
+                                    <p id="auditStatusText"><b>Collected at : </b><%= audit.collected_at %></p>
                                 </div>
                                 <div id="auditCompletedAt">
-                                    <p id="auditStatusText"><b>Audit Completed at : </b><%= audit.completed_at %></p>
+                                    <p id="auditStatusText"><b>Completed at : </b><%= audit.completed_at %></p>
                                 </div>
                             </div>
                         </div>

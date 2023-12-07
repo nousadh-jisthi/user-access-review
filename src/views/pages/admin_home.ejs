@@ -10,22 +10,22 @@
         <div class="col-lg col-md">
           <div class="card">
             <div class="card-header bg-success text-white">
-              Create Audit
+              Create Review
             </div>
             <div class="card-body">
               <form action="/admin/create-audit" method="post" >
                   <div class="row mb-3">
                     <div class="col">
-                      <label for="auditName" class="form-label">Audit Name</label>
+                      <label for="auditName" class="form-label">Review Name</label>
                       <input name="audit_name" type="text" class="form-control" id="auditName" required>
                     </div>
                     <div class="col">
-                      <label for="auditStartDate" class="form-label">Audit Start Date</label>
+                      <label for="auditStartDate" class="form-label">Review Start Date</label>
                       <input  name="audit_start_date" type="date" class="form-control" id="auditStartDate" required>
                     </div>
                   </div>
                   <div class="mb-3">
-                    <label for="auditDescription" class="form-label">Audit Description</label>
+                    <label for="auditDescription" class="form-label">Review Description</label>
                     <textarea name="audit_description" class="form-control" id="auditDescription" rows="1" required></textarea>
                   </div>
                   <button type="submit" class="btn btn-primary">Submit</button>
@@ -40,7 +40,7 @@
           <div class="col-lg col-md">
             <div class="card">
               <div class="card-header bg-primary text-white">
-                All Audits
+                All Reviews
               </div>
               <div class="card-body">
                 <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
