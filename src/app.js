@@ -3,6 +3,7 @@ const express = require('express');
 const session = require('express-session');
 const path = require('path');
 const bcrypt = require('bcryptjs');
+const flash = require('connect-flash');
 require('dotenv').config();
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(session({
 	resave: true,
 	saveUninitialized: true
 }));
+app.use(flash());
 
 app.use(express.static(path.join(__dirname,'public')))
 
