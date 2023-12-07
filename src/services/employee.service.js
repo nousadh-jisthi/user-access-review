@@ -2,6 +2,7 @@ const { Employee, PermissionGroup, EmployeeGroup, Audit } = require('../../model
 const { Op } = require('sequelize')
 
 // Function to display all employees by name of manager
+// TODO: Refactor to get permission groups using inner join
 async function employeesUnderManager(managerDn, audit_id){
     var response = {"manager": managerDn, "employees": [], groups: {}}
 
@@ -77,10 +78,8 @@ async function pending_manager_reviews(audit_id, managerDn){
 
     if (employees.length > 0) {
         // The employees with unapproved permissions under the manager are in the employees array
-        // console.log('Employees with unapproved permissions:', employees);
         return employees;
     } else {
-        // console.log('No employees found for the manager with ID', managerDn);
         return null;
     }
     

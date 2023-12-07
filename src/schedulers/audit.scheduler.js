@@ -8,7 +8,6 @@ async function run_any_pending_audit(){
     try{
         const audit = await auditUtil.retrieve_pending_data_collection_audits();
         if (audit){
-            console.log(audit.id)
             auditUtil.collect_audit_data(audit.id);
         }
     }catch(err){

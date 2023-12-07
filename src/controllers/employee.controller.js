@@ -41,14 +41,12 @@ async function post_bulk_update(req, res, next){
     const t = await sequelize.transaction();
     try{
         const auditId = req.body.auditId
-        // console.log(req.body.changes)
         // TODO: Validate user id belongs to manager
         Object.keys(req.body.changes).forEach(async function(key){
             req.body.changes[key].forEach(async function(change){
                 const userId = change.userId
                 const permissionGroupId = change.permissionGroupId
                 const isApproved = change.isApproved
-                console.log(auditId, userId, permissionGroupId, isApproved)
                 await employeeService.update_permission(auditId, userId, permissionGroupId, isApproved)
             });
         });

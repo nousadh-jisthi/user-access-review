@@ -17,10 +17,9 @@ function createLdapConnection(bindDn, bindCredentials) {
     client = ldap.createClient(ldapOptions);
     client.bind(bindDn, bindCredentials, (err) => {
       if (err) {
-        //console.error('LDAP Bind Error:', err);
+        console.error('LDAP Bind Error:', err);
         reject(err);
       } else {
-        console.log('LDAP Bind Successful');
         resolve(bindDn);
       }
     });
@@ -39,7 +38,6 @@ function closeLdapConnection() {
         console.error('LDAP Unbind Error:', err);
         reject(err);
       } else {
-        console.log('LDAP Unbind Successful');
         resolve();
       }
     });
@@ -60,21 +58,21 @@ async function getAllEmployees(audit_id, successCallback, errorCallback) {
             console.log("Error in search " + err)
         } else {
             res.on('searchRequest', (searchRequest) => {
-                console.log('searchRequest: ', searchRequest.messageId);
+                //console.log('searchRequest: ', searchRequest.messageId);
               });
               res.on('searchEntry', (entry) => {
                 //console.log('entry: ' + JSON.stringify(entry.pojo));
                 parseEmployee(entry, audit_id);
               });
               res.on('searchReference', (referral) => {
-                console.log('referral: ' + referral.uris.join());
+                //console.log('referral: ' + referral.uris.join());
               });
               res.on('error', (err) => {
                 console.error('error: ' + err.message);
                 errorCallback()
               });
               res.on('end', (result) => {
-                console.log('status: ' + result.status);
+                //console.log('status: ' + result.status);
                 successCallback()
                 // Close the connection when you're done
               });
@@ -92,7 +90,6 @@ function parseEmployee(entry, audit_id) {
       attributes.forEach(attribute => {
         employee[attribute.type] = attribute.values[0]
       });
-      console.log(JSON.stringify(employee))
       Employee.create(employee)
   }
 
@@ -112,20 +109,18 @@ function getAllPermissionGroups(audit_id){
           reject(err)
       } else {
           res.on('searchRequest', (searchRequest) => {
-              console.log('searchRequest: ', searchRequest.messageId);
+              //console.log('searchRequest: ', searchRequest.messageId);
             });
             res.on('searchEntry', (entry) => {
-              console.log('entry: ' + JSON.stringify(entry.pojo));
               parsePermissionGroup(entry, audit_id);
             });
             res.on('searchReference', (referral) => {
-              console.log('referral: ' + referral.uris.join());
+              //console.log('referral: ' + referral.uris.join());
             });
             res.on('error', (err) => {
               console.error('error: ' + err.message);
             });
             await res.on('end', (result) => {
-              console.log('status: ' + result.status);
               resolve(result.status)
             });
       }
@@ -148,7 +143,7 @@ function parsePermissionGroup(entry, audit_id){
         group[attribute.type] = attribute.values[0]
         }  
     });
-    console.log(JSON.stringify(group))
+
     PermissionGroup.create(group).then(async function(group) {
         for (var i = 0; i < members.length; i++){
         const employee = await Employee.findOne({where: {auditId: audit_id, dn: members[i]}})

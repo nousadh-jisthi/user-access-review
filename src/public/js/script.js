@@ -9,7 +9,6 @@ var changes = {};
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 ) {
         if (this.status == 200){
-          console.log("Response: " + this.responseText);
           response = JSON.parse(this.responseText)
           const users = response.employees
           populateUsers(users, response.groups);
@@ -201,9 +200,7 @@ var changes = {};
 
   // Handle submit button click
   submitButton.addEventListener('click', () => {
-    console.log(changes);
     $.post('/employee/bulk-update', {auditId: audit_id, changes: changes}, function(data, status){
-      console.log(data, status);
       if (status == "success"){
         createAlert("Changes saved successfully", "success");
       }else{

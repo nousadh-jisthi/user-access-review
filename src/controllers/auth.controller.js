@@ -47,11 +47,10 @@ async function post_employee_login(req, res, next){
 async function authenticate_employee(userDn, password){
     return new Promise(async (resolve, reject) => {
     try{
-        console.log(userDn)
         await ldapUtils.createLdapConnection(userDn, password);
         resolve(userDn)
     }catch(err){
-        //console.log(err)
+        console.log(err)
         reject(err)
     }finally{
         ldapUtils.closeLdapConnection();
@@ -61,7 +60,6 @@ async function authenticate_employee(userDn, password){
 
 async function post_employee_login(req, res, next){
     try{
-        console.log(req.body)
         const userDn = await authenticate_employee(req.body.userDn, req.body.password)
         if (userDn){
             req.session.userDn = userDn;

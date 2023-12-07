@@ -13,7 +13,6 @@ function getAuditDetails(){
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 ) {
             if (this.status == 200){
-                console.log("Response: " + this.responseText);
                 response = JSON.parse(this.responseText)
                 const managers = response
                 populateAuditDetails(managers);
@@ -62,8 +61,6 @@ function getEmployeesWithoutManagers(managers){
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 ) {
             if (this.status == 200){
-                console.log("Response: " + this.responseText);
-
                 populateEmployeesWithoutManagers(JSON.parse(this.responseText), managers);
             } else{
                 console.log("Error: " + this.responseText);
@@ -131,7 +128,6 @@ function handleReviewerSelection(manager, employee_id){
     } else{
         reviewerChanges["changes"][employee_id] = manager
     }
-    console.log(reviewerChanges)
 }
 
 exportReportButton.addEventListener('click', function(){
@@ -146,7 +142,6 @@ saveChangesButton.addEventListener('click', function(){
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 ) {
             if (this.status == 200){
-                console.log("Response: " + this.responseText);
                 window.location.reload();
             } else{
                 console.log("Error: " + this.responseText);

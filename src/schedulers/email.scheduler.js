@@ -7,7 +7,6 @@ const { renderFile } = require('ejs');
 
 async function send_any_pending_emails(){
     const incomplete_audits = await auditUtils.list_incomplete_audits();
-    console.log(incomplete_audits)
     incomplete_audits.forEach(async (audit) => {
         // Check if email was send for this audit in last 24 hours
         const last_emailed_at = audit.last_emailed_at;
