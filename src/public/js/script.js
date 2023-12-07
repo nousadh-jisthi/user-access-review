@@ -56,12 +56,13 @@ var changes = {};
     userInfo.textContent = `User DN: ${user.dn}\nUser CN: ${user.cn}`;
 
     const permissions = user.groups;
-
+    $('#datatable').DataTable().clear().destroy();
   
     // Clear previous permissions
     while (permissionsList.firstChild) {
       permissionsList.removeChild(permissionsList.firstChild);
     }
+    
     while (permissionInfo.firstChild) {
       permissionInfo.removeChild(permissionInfo.firstChild);
     }
@@ -119,10 +120,7 @@ var changes = {};
       
       permissionsList.appendChild(tr);
     });
-
-    $(document).ready(function() {
-      $('#datatable').dataTable();
-    });
+    new $('#datatable').DataTable();
   }
   
   // Handle permission status change
