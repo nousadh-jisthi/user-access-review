@@ -27,7 +27,7 @@ function getAuditDetails(){
 function populateAuditDetails(managers){
     Object.entries(managers).forEach(([manager, review_status]) => {
         const tr = document.createElement('tr');
-        tr.className = 'manager';
+        tr.className = 'reviewer';
 
         const managerDn = document.createElement('td');
         managerDn.textContent = manager;
@@ -74,10 +74,6 @@ function populateEmployeesWithoutManagers(employees, managers){
         const tr = document.createElement('tr');
         tr.className = 'employee';
 
-        const employeeDn = document.createElement('td');
-        employeeDn.textContent = employee.dn;
-        tr.appendChild(employeeDn);
-
         const employeeName = document.createElement('td');
         employeeName.textContent = employee.cn;
         tr.appendChild(employeeName);
@@ -85,6 +81,10 @@ function populateEmployeesWithoutManagers(employees, managers){
         const employeeEmail = document.createElement('td');
         employeeEmail.textContent = employee.mail;
         tr.appendChild(employeeEmail);
+
+        const employeeTitle = document.createElement('td');
+        employeeTitle.textContent = employee.title;
+        tr.appendChild(employeeTitle);
 
         const employeeManager = document.createElement('td');
         const select = document.createElement('select');

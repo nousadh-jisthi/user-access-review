@@ -53,7 +53,28 @@ var changes = {};
     event.target.classList.add('selected');
   
     // Display user information
-    userInfo.textContent = `User DN: ${user.dn}\nUser CN: ${user.cn}`;
+    while (userInfo.firstChild) {
+      userInfo.removeChild(userInfo.firstChild);
+    }
+    userInfo.style.display = 'block';
+
+    const userDiv = document.createElement('div');
+
+    const pUserDn = document.createElement('p')
+    pUserDn.textContent = `DN: ${user.dn}`;
+    pUserDn.style.wordBreak= 'break-all';
+    pUserDn.style.whiteSpace = 'normal'
+    userDiv.appendChild(pUserDn);
+
+    const pUserMail = document.createElement('p')
+    pUserMail.textContent = `Mail: ${user.mail}`;
+    userDiv.appendChild(pUserMail);
+
+    const pUserTitle = document.createElement('p')
+    pUserTitle.textContent = `Title: ${user.title}`;
+    userDiv.appendChild(pUserTitle);
+
+    userInfo.appendChild(userDiv);
 
     const permissions = user.groups;
     $('#datatable').DataTable().clear().destroy();

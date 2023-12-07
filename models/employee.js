@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     auditId: DataTypes.INTEGER,
     dn: DataTypes.STRING,
     cn: DataTypes.STRING,
+    title: DataTypes.STRING,
     manager: DataTypes.STRING,
     mail: DataTypes.STRING,
   }, {

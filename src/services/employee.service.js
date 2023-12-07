@@ -12,6 +12,8 @@ async function employeesUnderManager(managerDn, audit_id){
                 "id": employees[j].id,
                 "cn": employees[j].cn,
                 "dn": employees[j].dn,
+                "title": employees[j].title,
+                "mail": employees[j].mail,
                 "manager": employees[j].manager,
                 "groups": []
             } 

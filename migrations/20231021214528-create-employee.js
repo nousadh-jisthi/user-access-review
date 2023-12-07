@@ -18,6 +18,9 @@ module.exports = {
       cn: {
         type: Sequelize.STRING
       },
+      title: {
+        type: Sequelize.STRING
+      },
       manager: {
         type: Sequelize.STRING
       },

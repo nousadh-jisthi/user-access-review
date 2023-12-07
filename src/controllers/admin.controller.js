@@ -109,7 +109,7 @@ async function get_view_audit(req, res, next){
 }
 
 async function get_audit_report(req, res, next){
-    const fields = ['employee', 'manager', 'approved_permissions', 'rejected_permissions', 'pending_permissions']
+    const fields = ['employee', 'reviewer', 'approved_permissions', 'rejected_permissions', 'pending_permissions']
 
     const audit_id = req.query.audit_id
 
@@ -129,7 +129,7 @@ async function get_audit_report(req, res, next){
     })
     var report = []
     for(let employee of employees){
-        data = {"employee": employee.dn, "manager": employee.manager, "approved_permissions": [], "rejected_permissions": [], "pending_permissions": []}
+        data = {"employee": employee.dn, "reviewer": employee.manager, "approved_permissions": [], "rejected_permissions": [], "pending_permissions": []}
         for(let PermissionGroup of employee.PermissionGroups){
             if (PermissionGroup.EmployeeGroup.isApproved == null){
                 data.pending_permissions.push(PermissionGroup.cn)
@@ -162,7 +162,6 @@ async function update_employee_managers (changes, audit_id){
 async function post_update_employee_managers(req, res, next){
     const changes = req.body.changes
     const audit_id = req.body.audit_id
-    console.log(changes, audit_id)
     await update_employee_managers(changes, audit_id)
     res.json({"message": "Changes saved successfully!"})
 }

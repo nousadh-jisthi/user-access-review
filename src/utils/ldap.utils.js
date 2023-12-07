@@ -50,7 +50,7 @@ async function getAllEmployees(audit_id, successCallback, errorCallback) {
         filter: '(objectClass=inetOrgPerson)',  //simple search
         scope: 'sub',
         // TODO: Include title in the future
-        attributes: ['sn', 'cn', 'uid', 'manager','mail' ]
+        attributes: ['sn', 'cn', 'uid', 'manager','mail','title' ]
     };
   
     client.search(process.env.BASE_DN, opts, function (err, res) {
