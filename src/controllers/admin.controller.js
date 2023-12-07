@@ -153,7 +153,6 @@ async function get_audit_report(req, res, next){
 
 async function update_employee_managers (changes, audit_id){
     for (var employee_id of Object.keys(changes)){
-        console.log(employee_id, changes[employee_id])
         const employee = await Employee.findOne({where: {id: employee_id, auditId: audit_id}})
         employee.manager = changes[employee_id]
         await employee.save()

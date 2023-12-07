@@ -27,23 +27,52 @@ app.use(express.static(path.join(__dirname,'public')))
 
 const { Employee, PermissionGroup, EmployeeGroup, Admin } = require('../models');
 
-const employeeRouter = require('./routes/employee.route');
-app.use('/employee', employeeRouter);
+try{
+	const employeeRouter = require('./routes/employee.route');
+	app.use('/employee', employeeRouter);
+}catch(e){
+	console.log(e);
+}
 
-const adminRouter = require('./routes/admin.route');
-app.use('/admin', adminRouter);
+try{
+	const adminRouter = require('./routes/admin.route');
+	app.use('/admin', adminRouter);
+}catch(e){
+	console.log(e);
+}
 
-const authRouter = require('./routes/auth.route');
-app.use('/auth', authRouter);
+try{
+	const authRouter = require('./routes/auth.route');
+	app.use('/auth', authRouter);
+}catch(e){
+	console.log(e);
+}
 
-const auditScheduler = require('./schedulers/audit.scheduler');
-auditScheduler.initialize();
+try{
+	const auditScheduler = require('./schedulers/audit.scheduler');
+	auditScheduler.initialize();
+}catch(e){
+	console.log(e);
+}
 
-const emailScheduler = require('./schedulers/email.scheduler');
-emailScheduler.initialize();
+try{
+	const emailScheduler = require('./schedulers/email.scheduler');
+	emailScheduler.initialize();
+}catch(e){
+	console.log(e);
+}
 
-const adminUtils = require('./utils/admin.utils');
-adminUtils.createAdmin();
+
+try{
+	const adminUtils = require('./utils/admin.utils');
+	adminUtils.createAdmin();
+}catch(e){
+	console.log(e);
+}
+
+app.get('/', async (req, res) => {
+	res.redirect('/auth/login');
+});
 
 const server = app.listen( app_port , app_host, function(){
   console.log('Listening on port ' + server.address().port);

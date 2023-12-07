@@ -12,13 +12,18 @@ let transport = nodemailer.createTransport({
 });
 
 async function sendMail(to, subject, html){
-    let info = await transport.sendMail({
-        from: process.env.EMAIL_USER,
-        to: to,
-        subject: subject,
-        html: html
-    });
-    return info;
+    try{
+        let info = await transport.sendMail({
+            from: process.env.EMAIL_USER,
+            to: to,
+            subject: subject,
+            html: html
+        });
+        return info;
+    }catch(err){
+        console.log(err)
+    }
+    
 }
 
 module.exports = {
