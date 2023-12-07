@@ -25,6 +25,8 @@ function getAuditDetails(){
 }
 
 function populateAuditDetails(managers){
+    let completedEmployees = 0;
+    let totalEmployees = 0;
     Object.entries(managers).forEach(([manager, review_status]) => {
         const tr = document.createElement('tr');
         tr.className = 'reviewer';
@@ -46,11 +48,20 @@ function populateAuditDetails(managers){
         tr.appendChild(reviewStatus);
 
         managerList.appendChild(tr);
+
+        completedEmployees += review_status.reviewed;
+        totalEmployees += review_status.notReviewed+review_status.reviewed;
     });
 
     $(document).ready(function() {
         $('#datatable').dataTable();
       });
+    
+    const progress = document.getElementById('auditProgressText')
+    const b = document.createElement('b')
+    b.textContent = "Progress: "
+    progress.appendChild(b)
+    progress.append((completedEmployees/totalEmployees*100).toFixed(2) + "%");
 
 }
 
