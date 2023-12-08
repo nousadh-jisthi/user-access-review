@@ -42,17 +42,17 @@ async function post_bulk_update(req, res, next){
     try{
         const auditId = req.body.auditId
         // TODO: Validate user id belongs to manager
-        Object.keys(req.body.changes).forEach(async function(key){
-            req.body.changes[key].forEach(async function(change){
+        for (let entry of req.body.changes){
+            for (let change of entry){
                 const userId = change.userId
                 const permissionGroupId = change.permissionGroupId
                 const isApproved = change.isApproved
                 await employeeService.update_permission(auditId, userId, permissionGroupId, isApproved)
-            });
-        });
+            }
+        }
 
         await t.commit();
-        auditUtils.audit_completion_update(auditId)
+        await auditUtils.audit_completion_update(auditId)
         res.json({"message": "success"})
     }catch(error){
         await t.rollback();
