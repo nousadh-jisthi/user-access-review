@@ -11,7 +11,12 @@ async function create_audit(audit_name, audit_description, audit_start_date){
 async function post_create_audit (req, res, next){
     try{   
         const {audit_name, audit_description, audit_start_date} = req.body
-        const response = await create_audit(audit_name, audit_description, audit_start_date)
+        let temp = new Date(audit_start_date)
+        const timeZoneOffset = temp.getTimezoneOffset();
+        const utcTime = temp.getTime() + (timeZoneOffset * 60000);
+        const localDate = new Date(utcTime);
+
+        const response = await create_audit(audit_name, audit_description, localDate)
         // TODO: Add success message
         // redirect to home page
         res.redirect('/admin/home')
